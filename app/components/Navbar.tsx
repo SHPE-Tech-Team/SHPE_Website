@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,7 @@ export default function Navbar() {
 
     const links = [
         { name: 'Home', href: '/' },
-        { name: 'Get Involved', href: '/get-involved' },
+        // { name: 'Get Involved', href: '/get-involved' },
         { name: 'Events', href: '/events' },
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
@@ -22,8 +23,8 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20">
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="text-2xl font-bold tracking-tighter text-shpe-blue hover:text-shpe-orange transition-colors">
-                            SHPE<span className="text-shpe-orange">.UIUC</span>
+                        <Link href="/" className="text-2xl font-bold tracking-tighter text-uiuc-blue hover:text-uiuc-orange transition-colors flex items-center gap-2">
+                            <Image src="/logo.png" alt="SHPE Logo" width={100} height={100} />
                         </Link>
                     </div>
 
@@ -34,8 +35,8 @@ export default function Navbar() {
                                 key={link.name}
                                 href={link.href}
                                 className={`text-sm font-medium transition-colors duration-200 ${pathname === link.href
-                                        ? 'text-shpe-orange'
-                                        : 'text-gray-600 hover:text-shpe-blue'
+                                    ? 'text-uiuc-orange'
+                                    : 'text-gray-600 hover:text-uiuc-blue'
                                     }`}
                             >
                                 {link.name}
@@ -43,7 +44,7 @@ export default function Navbar() {
                         ))}
                         <Link
                             href="/get-involved"
-                            className="bg-shpe-orange hover:bg-shpe-orange-dark text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                            className="bg-uiuc-orange hover:bg-shpe-orange-dark text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         >
                             Join Now
                         </Link>
@@ -80,8 +81,8 @@ export default function Navbar() {
                             href={link.href}
                             onClick={() => setIsOpen(false)}
                             className={`block px-3 py-2 rounded-md text-base font-medium ${pathname === link.href
-                                    ? 'text-shpe-orange bg-orange-50'
-                                    : 'text-gray-600 hover:text-shpe-blue hover:bg-gray-50'
+                                ? 'text-uiuc-orange bg-orange-50'
+                                : 'text-gray-600 hover:text-uiuc-blue hover:bg-gray-50'
                                 }`}
                         >
                             {link.name}
@@ -91,7 +92,7 @@ export default function Navbar() {
                         <Link
                             href="/get-involved"
                             onClick={() => setIsOpen(false)}
-                            className="w-full block text-center bg-shpe-orange hover:bg-shpe-orange-dark text-white px-5 py-3 rounded-lg text-base font-medium transition-colors"
+                            className="w-full block text-center bg-uiuc-orange hover:bg-shpe-orange-dark text-white px-5 py-3 rounded-lg text-base font-medium transition-colors"
                         >
                             Join Chapter
                         </Link>
