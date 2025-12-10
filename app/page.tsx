@@ -1,35 +1,11 @@
 import Link from "next/link";
+import HeroCarousel from "./components/HeroCarousel";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Hero Section */}
-      <section className="w-full bg-gradient-to-r from-shpe-blue to-shpe-blue-light text-white py-24 md:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 animate-fade-in-up">
-            Society of Hispanic <br className="hidden md:block" />
-            <span className="text-shpe-orange">Professional Engineers</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
-            University of Illinois Urbana-Champaign Chapter
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/get-involved"
-              className="bg-shpe-orange hover:bg-shpe-orange-dark text-white px-8 py-4 rounded-full text-lg font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Join Our Familia
-            </Link>
-            <Link
-              href="/events"
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-full text-lg font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Upcoming Events
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel />
 
       {/* Pillars Section */}
       <section className="py-20 bg-white w-full">

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
     return (
@@ -6,8 +7,8 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div className="col-span-1 md:col-span-1">
-                        <Link href="/" className="text-2xl font-bold tracking-tighter text-shpe-blue">
-                            SHPE<span className="text-shpe-orange">.UIUC</span>
+                        <Link href="/" className="text-2xl font-bold tracking-tighter text-uiuc-blue hover:text-uiuc-orange transition-colors flex items-center gap-2">
+                            <Image src="/logo.png" alt="SHPE Logo" width={200} height={200} />
                         </Link>
                         <p className="mt-4 text-gray-500 text-sm leading-relaxed">
                             Empowering the Hispanic community to realize its fullest potential and to impact the world through STEM awareness, access, support, and development.
