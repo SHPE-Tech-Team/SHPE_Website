@@ -2,11 +2,27 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const SLIDES = [
-    { id: 1, color: "bg-slate-800", label: "Placeholder Slide 1" },
-    { id: 2, color: "bg-slate-700", label: "Placeholder Slide 2" },
-    { id: 3, color: "bg-slate-900", label: "Placeholder Slide 3" },
+    {
+        id: 1,
+        image: "/SHPECON_2025.JPG",
+        alt: "SHPE UIUC Community",
+        color: "bg-slate-800" // Fallback
+    },
+    {
+        id: 2,
+        image: "/SHPECON_2025_2.JPG",
+        alt: "SHPE UIUC Community 2",
+        color: "bg-slate-800"
+    },
+    {
+        id: 3,
+        image: "/SHPECON_sheesh.JPG",
+        alt: "SHPE UIUC Community 3",
+        color: "bg-slate-900"
+    },
 ];
 
 export default function HeroCarousel() {
@@ -28,12 +44,25 @@ export default function HeroCarousel() {
                     className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === current ? "opacity-100" : "opacity-0"
                         }`}
                 >
-                    {/* Placeholder Background */}
-                    <div className={`w-full h-full ${slide.color} flex items-center justify-center`}>
-                        <div className="text-white/10 text-6xl font-black rotate-12 select-none">
-                            {slide.label}
+                    {slide.image ? (
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={slide.image}
+                                alt={slide.alt || "Hero Image"}
+                                fill
+                                className="object-cover object-center"
+                                priority={index === 0}
+                            />
                         </div>
-                    </div>
+                    ) : (
+                        /* Placeholder Background */
+                        <div className={`w-full h-full ${slide.color} flex items-center justify-center`}>
+                            <div className="text-white/10 text-6xl font-black rotate-12 select-none">
+                                {slide.alt}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Overlay Gradient for better text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30"></div>
                 </div>
