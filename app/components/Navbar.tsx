@@ -10,7 +10,7 @@ export default function Navbar() {
     const pathname = usePathname();
 
     const links = [
-        { name: 'Events', href: '/events' },
+        // { name: 'Events', href: '/events' },
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
         { name: 'Contact', href: '/contact' },
@@ -22,7 +22,8 @@ export default function Navbar() {
                 <div className="flex justify-between h-20">
                     <div className="flex-shrink-0 flex items-center">
                         <Link href="/" className="text-2xl font-bold tracking-tighter text-uiuc-blue hover:text-uiuc-orange transition-colors flex items-center gap-2">
-                            <Image src="/logo.png" alt="SHPE Logo" width={100} height={100} />
+                            {/* Added unoptimized and a key to force refresh if needed, though unoptimized usually does the trick for local dev caching issues with Next.js Image */}
+                            <Image src="/logo.png" alt="SHPE Logo" width={250} height={250} unoptimized className="object-contain" />
                         </Link>
                     </div>
 
