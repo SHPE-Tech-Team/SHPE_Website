@@ -37,8 +37,9 @@ export default function Footer() {
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">Connect</h3>
                         <ul className="space-y-3">
-                            <li><a href="https://www.instagram.com/shpe_uiuc/?hl=en" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">Instagram</a></li>
-                            <li><a href="https://www.linkedin.com/company/society-of-hispanic-professional-engineers-uiuc-chapter/posts/?feedView=all" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">LinkedIn</a></li>
+                            <li><Link href="https://join.slack.com/t/shpe-uiuc/shared_invite/zt-3bb1v0tpc-nmf3p9VJTEpLtX1tjb~iBw" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">Instagram</Link></li>
+                            <li><Link href="https://www.instagram.com/shpe_uiuc/?hl=en" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">Slack</Link></li>
+                            <li><Link href="https://www.linkedin.com/company/society-of-hispanic-professional-engineers-uiuc-chapter/posts/?feedView=all" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">LinkedIn</Link></li>
                         </ul>
                     </div>
                 </div>
