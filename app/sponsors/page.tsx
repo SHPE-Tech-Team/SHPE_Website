@@ -2,18 +2,28 @@ export default function Sponsors() {
     return (
         <div className="bg-white min-h-screen">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-shpe-blue text-white py-24 sm:py-32">
-                {/* Decorative elements */}
+            <div className="relative overflow-hidden bg-gray-900 text-white py-24 sm:py-32">
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                    <img
+                        src="/gbm.JPG"
+                        alt="SHPE UIUC GBM"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50" />
+                </div>
+
+                {/* Decorative elements (adjust z-index or opacity if needed, or remove if they clash) */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
                     <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
                     <div className="absolute top-1/2 right-0 w-64 h-64 rounded-full bg-shpe-orange blur-3xl"></div>
                 </div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl font-extrabold sm:text-6xl mb-6 tracking-tight">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+                    <h1 className="text-4xl font-extrabold sm:text-6xl mb-6 tracking-tight drop-shadow-lg">
                         Partner with SHPE UIUC
                     </h1>
-                    <p className="max-w-2xl mx-auto text-xl text-blue-100 mb-10">
+                    <p className="max-w-2xl mx-auto text-xl text-gray-200 mb-10 drop-shadow-md">
                         Connect with top engineering talent and support the next generation of Hispanic STEM leaders.
                     </p>
                     <a href="mailto:exec.shpe.uiuc@gmail.com" className="inline-block bg-shpe-orange text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">

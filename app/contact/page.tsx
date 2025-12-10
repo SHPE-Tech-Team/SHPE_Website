@@ -1,3 +1,5 @@
+"use client";
+
 export default function Contact() {
     const contacts = [
         {
@@ -131,12 +133,20 @@ export default function Contact() {
     return (
         <div className="bg-white">
             {/* Header */}
-            <div className="bg-gray-50 py-16 sm:py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl font-extrabold text-shpe-blue sm:text-5xl sm:tracking-tight lg:text-6xl">
+            <div className="relative bg-gray-900 py-24 sm:py-32 overflow-hidden">
+                <div className="absolute inset-0">
+                    <img
+                        src="/contact.JPG"
+                        alt="SHPE UIUC Contact"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+                </div>
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl text-shadow-lg">
                         Contact Us
                     </h1>
-                    <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
+                    <p className="max-w-xl mt-5 mx-auto text-xl text-gray-200 drop-shadow-md">
                         Have a question? Reach out to the appropriate board member below.
                     </p>
                 </div>
