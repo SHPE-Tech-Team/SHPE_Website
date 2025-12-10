@@ -10,8 +10,6 @@ export default function Navbar() {
     const pathname = usePathname();
 
     const links = [
-        { name: 'Home', href: '/' },
-        // { name: 'Get Involved', href: '/get-involved' },
         { name: 'Events', href: '/events' },
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
@@ -34,9 +32,9 @@ export default function Navbar() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className={`text-sm font-medium transition-colors duration-200 ${pathname === link.href
-                                    ? 'text-uiuc-orange'
-                                    : 'text-gray-600 hover:text-uiuc-blue'
+                                className={`text-sm font-medium transition-colors duration-200 px-3 py-2 rounded-md ${pathname === link.href
+                                    ? 'bg-blue-100 text-black'
+                                    : 'text-gray-600 hover:bg-blue-100 hover:text-black'
                                     }`}
                             >
                                 {link.name}

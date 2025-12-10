@@ -42,20 +42,19 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-              { title: "Academic Excellence", desc: "Supporting members in their academic pursuits through study tables, mentorship, and resources." },
-              { title: "Professional Development", desc: "Connecting students with industry leaders, resume workshops, and career fair preparation." },
-              { title: "Leadership Development", desc: "Cultivating the next generation of leaders through committee involvement and executive board roles." },
-              { title: "Chapter Development", desc: "Building a strong, inclusive community where every member feels like family." },
-              { title: "Community Outreach", desc: "Giving back to the local community and inspiring the next generation of STEM professionals." },
+              { title: "Familia", desc: "We take responsibility for our collective strength and passion by developing communities, building a diverse and inclusive membership, and challenging each other to be our best." },
+              { title: "Service", desc: "We act on a foundation of service. We commit to deliver the highest levels of quality, integrity, and ethical behavior. We act with empathy, patience, and understanding." },
+              { title: "Education", desc: "We value formal education and professional development. We are dedicated to continuous improvement and renewal. We learn from successes, setbacks, and each other." },
+              { title: "Resilience", desc: "We embrace our diverse cultures and communities, which enable us to adapt, thrive, and persist with optimism." },
             ].map((pillar, index) => (
               <div key={index} className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-shadow border border-gray-100 group">
-                <div className="w-12 h-12 bg-shpe-blue/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-shpe-orange/10 transition-colors">
-                  <div className="w-6 h-6 bg-shpe-blue rounded-full group-hover:bg-shpe-orange transition-colors"></div>
+                <div className="w-16 h-16 bg-shpe-blue/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-shpe-orange/10 transition-colors">
+                  <div className="w-8 h-8 bg-shpe-blue rounded-full group-hover:bg-shpe-orange transition-colors"></div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{pillar.title}</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{pillar.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">
                   {pillar.desc}
                 </p>
               </div>
