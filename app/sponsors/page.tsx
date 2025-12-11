@@ -54,7 +54,7 @@ export default function Sponsors() {
                                 <svg className="w-6 h-6 text-shpe-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">Brand Visibility</h3>
-                            <p className="text-gray-600">Maximize your brand's presence on campus and within the national SHPE network.</p>
+                            <p className="text-gray-600">Maximize your brand&apos;s presence on campus and within the national SHPE network.</p>
                         </div>
                         {/* Card 3 */}
                         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
@@ -104,7 +104,7 @@ export default function Sponsors() {
 
                                 <div>
                                     <p className="text-sm text-gray-500 uppercase tracking-wide font-semibold mb-1">Note</p>
-                                    <p className="text-lg text-gray-700 italic">"Reach out to me on Slack"</p>
+                                    <p className="text-lg text-gray-700 italic">&quot;Reach out to me on Slack&quot;</p>
                                 </div>
                             </div>
 
