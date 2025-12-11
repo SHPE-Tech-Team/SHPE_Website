@@ -18,9 +18,9 @@ export default function Footer() {
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">Navigation</h3>
                         <ul className="space-y-3">
-                            <li><Link href="/" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Home</Link></li>
+                            {/* <li><Link href="/" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Home</Link></li> */}
                             <li><Link href="/about" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">About Us</Link></li>
-                            <li><Link href="/events" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Events</Link></li>
+                            {/* <li><Link href="/events" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Events</Link></li> */}
                             <li><Link href="/contact" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Contact</Link></li>
                         </ul>
                     </div>
