@@ -1,10 +1,15 @@
-
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { committees } from '@/app/data/committees';
+import { client } from '@/sanity/lib/client';
+import { COMMITTEE_BY_ID_QUERY, COMMITTEES_QUERY } from '@/sanity/lib/queries';
+import { Committee } from '@/app/data/committees';
+import { PortableText } from '@portabletext/react';
+
+export const revalidate = 60;
 
 // Helper to generate static params for all committees
 export async function generateStaticParams() {
+    const committees = await client.fetch<Committee[]>(COMMITTEES_QUERY);
     return committees.map((committee) => ({
         slug: committee.id,
     }));
@@ -12,7 +17,7 @@ export async function generateStaticParams() {
 
 export default async function CommitteePage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
-    const committee = committees.find((c) => c.id === params.slug);
+    const committee = await client.fetch<Committee>(COMMITTEE_BY_ID_QUERY, { slug: params.slug });
 
     if (!committee) {
         notFound();
@@ -81,7 +86,7 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                     </div>
                     <div className="lg:col-span-8">
                         <div className="prose prose-lg text-gray-600 leading-relaxed max-w-none text-xl">
-                            {committee.fullDescription}
+                            <PortableText value={committee.fullDescription} />
                         </div>
                     </div>
                 </div>
@@ -101,7 +106,7 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {committee.leads && committee.leads.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {committee.leads.map((lead, idx) => (
+                            {committee.leads.map((lead: any, idx: number) => (
                                 <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                                     <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
                                     <h4 className="text-xl font-bold text-gray-900">{lead.name}</h4>
@@ -159,7 +164,7 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <h3 className="text-xl font-bold text-gray-900 mb-6">Resources</h3>
                         <div className="flex flex-wrap justify-center gap-4">
-                            {committee.links.map((link, i) => (
+                            {committee.links.map((link: any, i: number) => (
                                 <a key={i} href={link.url} className="px-6 py-3 bg-white border border-gray-200 rounded-lg text-shpe-blue font-semibold hover:border-shpe-blue transition-colors">
                                     {link.label}
                                 </a>

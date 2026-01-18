@@ -1,9 +1,15 @@
-"use client";
+
 
 import Link from "next/link";
-import { committees } from "@/app/data/committees";
+import { client } from "@/sanity/lib/client";
+import { COMMITTEES_QUERY } from "@/sanity/lib/queries";
+import { Committee } from "@/app/data/committees"; // Keep interface for type safety if needed, or define locally
 
-export default function GetInvolved() {
+export const revalidate = 60; // Revalidate every 60 seconds
+
+export default async function GetInvolved() {
+    const committees = await client.fetch<Committee[]>(COMMITTEES_QUERY);
+
     return (
         <div className="bg-white min-h-screen">
             {/* Header */}
