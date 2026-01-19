@@ -2,8 +2,20 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { client } from '@/sanity/lib/client';
 import { COMMITTEE_BY_ID_QUERY, COMMITTEES_QUERY } from '@/sanity/lib/queries';
-import { Committee } from '@/app/data/committees';
 import { PortableText } from '@portabletext/react';
+
+interface Committee {
+    id: string;
+    title: string;
+    shortDescription: string;
+    fullDescription: any;
+    contact: string;
+    email: string;
+    meeting: string;
+    image?: string;
+    leads?: { name: string; role: string; image?: string }[];
+    links?: { label: string; url: string }[];
+}
 
 export const revalidate = 60;
 
