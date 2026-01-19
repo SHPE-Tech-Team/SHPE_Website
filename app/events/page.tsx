@@ -14,6 +14,31 @@ interface Event {
     badge: string;
 }
 
+const getGoogleCalendarUrl = (event: Event) => {
+    const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+    const details = encodeURIComponent(event.description || "");
+    const location = encodeURIComponent(event.location || "");
+    const text = encodeURIComponent(event.title || "");
+
+    // Try to parse date if possible (very basic)
+    let dates = "";
+    try {
+        // Append current year if missing to help parsing
+        const dateStr = event.date + (event.date.match(/\d{4}/) ? "" : `, ${new Date().getFullYear()}`);
+        const startDate = new Date(dateStr);
+        if (!isNaN(startDate.getTime())) {
+            // Add 1 hour duration
+            const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+            const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
+            dates = `&dates=${format(startDate)}/${format(endDate)}`;
+        }
+    } catch (e) {
+        // Ignore parsing errors
+    }
+
+    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}`;
+};
+
 export default async function Events() {
     const events = await client.fetch<Event[]>(EVENTS_QUERY);
 
@@ -37,8 +62,8 @@ export default async function Events() {
                         events.map((event, index) => (
                             <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:scale-105 transition-transform duration-300 flex flex-col">
                                 <div className="bg-shpe-blue h-2"></div>
-                                <div className="p-8 flex-1 flex flex-col">
-                                    <div className="flex justify-between items-start mb-4">
+                                <div className="p-4 sm:p-8 flex-1 flex flex-col">
+                                    <div className="flex justify-between items-start mb-2 sm:mb-4">
                                         <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${event.badge === 'Academic' ? 'bg-green-100 text-green-800' :
                                             event.badge === 'Professional' ? 'bg-purple-100 text-purple-800' :
                                                 event.badge === 'Social' ? 'bg-pink-100 text-pink-800' :
@@ -48,9 +73,9 @@ export default async function Events() {
                                         </span>
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
+                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">{event.title}</h3>
 
-                                    <div className="text-gray-600 space-y-2 mb-4 flex-1">
+                                    <div className="text-gray-600 space-y-1 sm:space-y-2 mb-3 sm:mb-4 flex-1 text-sm sm:text-base">
                                         <div className="flex items-center">
                                             <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -66,11 +91,21 @@ export default async function Events() {
                                         </div>
                                     </div>
 
-                                    {event.rsvpLink && (
-                                        <a href={event.rsvpLink} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-shpe-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                                            RSVP Here
+                                    <div className="flex flex-row gap-2 sm:flex-col sm:space-y-3 sm:gap-0 mt-3 sm:mt-4">
+                                        {event.rsvpLink && (
+                                            <a href={event.rsvpLink} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center bg-shpe-blue hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded-full sm:rounded-2xl transition-colors text-sm sm:text-base shadow-sm">
+                                                RSVP
+                                            </a>
+                                        )}
+                                        <a
+                                            href={getGoogleCalendarUrl(event)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex-1 block w-full text-center bg-blue-50 hover:bg-blue-100 text-shpe-blue font-bold py-2 px-2 sm:px-4 rounded-full sm:rounded-2xl transition-colors text-sm sm:text-base border border-transparent"
+                                        >
+                                            + Calendar
                                         </a>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         ))
@@ -83,7 +118,7 @@ export default async function Events() {
             </div>
 
             {/* Calendar Embedding Placeholder */}
-            <div className="bg-gray-50 py-16">
+            <div className="bg-gray-50 py-16 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">Calendar</h2>
                     <div className="bg-white rounded-2xl shadow-sm p-4 h-[600px] flex items-center justify-center border border-gray-200">
