@@ -1,24 +1,21 @@
-export default function Events() {
-    const events = [
-        {
-            title: "General Body Meeting",
-            date: "Tuesdays, 7:00 PM",
-            location: "ECEB 1002",
-            badge: "Weekly"
-        },
-        {
-            title: "Study Tables",
-            date: "Wednesdays, 6:00 PM",
-            location: "Grainger Library",
-            badge: "Academic"
-        },
-        {
-            title: "Corporate Info Session",
-            date: "Oct 15, 6:00 PM",
-            location: "Siebel Center",
-            badge: "Professional"
-        },
-    ];
+import { client } from "@/sanity/lib/client";
+import { EVENTS_QUERY } from "@/sanity/lib/queries";
+
+export const revalidate = 60;
+
+interface Event {
+    title: string;
+    slug: string;
+    date: string;
+    location: string;
+    description: string;
+    image: string;
+    rsvpLink: string;
+    badge: string;
+}
+
+export default async function Events() {
+    const events = await client.fetch<Event[]>(EVENTS_QUERY);
 
     return (
         <div className="bg-white">
@@ -36,32 +33,52 @@ export default function Events() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    {events.map((event, index) => (
-                        <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:scale-105 transition-transform duration-300">
-                            <div className="bg-shpe-blue h-2"></div>
-                            <div className="p-8">
-                                <div className="inline-block px-3 py-1 bg-blue-50 text-shpe-blue text-xs font-semibold rounded-full mb-4">
-                                    {event.badge}
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
-                                <div className="text-gray-600 space-y-2">
-                                    <div className="flex items-center">
-                                        <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        {event.date}
+                    {events.length > 0 ? (
+                        events.map((event, index) => (
+                            <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:scale-105 transition-transform duration-300 flex flex-col">
+                                <div className="bg-shpe-blue h-2"></div>
+                                <div className="p-8 flex-1 flex flex-col">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${event.badge === 'Academic' ? 'bg-green-100 text-green-800' :
+                                            event.badge === 'Professional' ? 'bg-purple-100 text-purple-800' :
+                                                event.badge === 'Social' ? 'bg-pink-100 text-pink-800' :
+                                                    'bg-blue-50 text-shpe-blue'
+                                            }`}>
+                                            {event.badge || 'General'}
+                                        </span>
                                     </div>
-                                    <div className="flex items-center">
-                                        <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        {event.location}
+
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
+
+                                    <div className="text-gray-600 space-y-2 mb-4 flex-1">
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            {event.date}
+                                        </div>
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            {event.location || 'TBD'}
+                                        </div>
                                     </div>
+
+                                    {event.rsvpLink && (
+                                        <a href={event.rsvpLink} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-shpe-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                                            RSVP Here
+                                        </a>
+                                    )}
                                 </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-12">
+                            <p className="text-xl text-gray-500">No upcoming events at the moment. Check back soon!</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
 
@@ -70,7 +87,7 @@ export default function Events() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">Calendar</h2>
                     <div className="bg-white rounded-2xl shadow-sm p-4 h-[600px] flex items-center justify-center border border-gray-200">
-                        <p className="text-gray-500">Google Calendar Embedding Area</p>
+                        <iframe src="https://calendar.google.com/calendar/embed?src=shpe.uiuc%40gmail.com&ctz=America%2FChicago" style={{ border: 0 }} width="100%" height="600" frameBorder="0" scrolling="no"></iframe>
                     </div>
                 </div>
             </div>

@@ -47,5 +47,16 @@ export const EVENTS_QUERY = groq`*[_type == "event"] | order(date asc) {
   location,
   description,
   "image": image.asset->url,
-  rsvpLink
+  rsvpLink,
+  badge
+}`
+
+export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(order asc) {
+  name,
+  role,
+  pronouns,
+  year,
+  major,
+  email,
+  note
 }`

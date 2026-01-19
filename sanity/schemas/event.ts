@@ -12,6 +12,21 @@ export default defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: 'badge',
+            title: 'Badge / Category',
+            type: 'string',
+            options: {
+                list: [
+                    { title: 'Weekly', value: 'Weekly' },
+                    { title: 'Academic', value: 'Academic' },
+                    { title: 'Professional', value: 'Professional' },
+                    { title: 'Social', value: 'Social' },
+                    { title: 'Other', value: 'Other' },
+                ],
+            },
+            validation: (rule) => rule.required(),
+        }),
+        defineField({
             name: 'slug',
             title: 'Slug',
             type: 'slug',
@@ -24,7 +39,8 @@ export default defineType({
         defineField({
             name: 'date',
             title: 'Date & Time',
-            type: 'datetime',
+            type: 'string', // Changed to string to support recurring events like "Tuesdays"
+            description: 'e.g. "Oct 15, 6:00 PM" or "Tuesdays, 7:00 PM"',
             validation: (rule) => rule.required(),
         }),
         defineField({

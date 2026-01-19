@@ -15,6 +15,7 @@ export default defineType({
             name: 'id',
             title: 'Slug (ID)',
             type: 'slug',
+            description: 'The unique URL part for this committee page. Click "Generate" to create it from the title.',
             options: {
                 source: 'title',
                 maxLength: 96,
@@ -25,12 +26,14 @@ export default defineType({
             name: 'shortDescription',
             title: 'Short Description',
             type: 'text',
+            description: 'Displayed on the main "Get Involved" card. Keep it brief (1-2 sentences).',
             rows: 3,
         }),
         defineField({
             name: 'fullDescription',
             title: 'Full Description',
             type: 'array',
+            description: 'The detailed content shown on the committee\'s dedicated page.',
             of: [{ type: 'block' }],
         }),
         defineField({
