@@ -194,14 +194,14 @@ export default async function Events() {
             </div>
 
             {/* Calendar Embedding Placeholder */}
-            <div className="bg-gray-50 py-16 hidden md:block">
+            {/* <div className="bg-gray-50 py-16 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">Calendar</h2>
                     <div className="bg-white rounded-2xl shadow-sm p-4 h-[600px] flex items-center justify-center border border-gray-200">
                         <iframe src="https://calendar.google.com/calendar/embed?src=shpe.uiuc%40gmail.com&ctz=America%2FChicago" style={{ border: 0 }} width="100%" height="600" frameBorder="0" scrolling="no"></iframe>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
