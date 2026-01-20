@@ -14,7 +14,7 @@ interface Event {
     badge: string;
 }
 
-const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: boolean } | null => {
+const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: boolean, isMonthly: boolean } | null => {
     try {
         const now = new Date();
         const currentYear = now.getFullYear();
@@ -69,21 +69,22 @@ const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: b
         const lowerDate = dateStr.toLowerCase();
         let resultDate: Date | null = null;
         let isWeekly = false;
+        let isMonthly = (event.badge === 'Monthly');
 
         // Strategy 1: Handle "Weekly" days
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         const dayIndex = days.findIndex(d => lowerDate.includes(d) || lowerDate.includes(d.slice(0, 3) + 's')); // "tuesdays" or "tue"
 
-        if (event.badge === 'Weekly' || dayIndex !== -1) {
+        if (event.badge === 'Weekly' || (dayIndex !== -1 && !isMonthly)) {
+            // Only force weekly logic if not explicitly monthly
             isWeekly = true;
             if (dayIndex !== -1) {
                 resultDate = new Date();
                 const currentDay = resultDate.getDay();
                 let daysUntil = (dayIndex + 7 - currentDay) % 7;
 
-                // If today is the day, check if time passed (approx check based on start hour)
+                // If today is the day, check if time passed
                 if (daysUntil === 0) {
-                    // If event is later today, keep today. If passed, next week.
                     const currentHour = now.getHours();
                     if (currentHour >= startSpec.hours) daysUntil = 7;
                 }
@@ -91,11 +92,10 @@ const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: b
             }
         }
 
-        // Strategy 2: Standard parse only if no weekly logic applied (or weekly logic failed to find day)
+        // Strategy 2: Standard parse (works for Monthly dates like "Oct 15")
         if (!resultDate) {
-            // "Oct 15" + current year
             const tryDate = new Date(dateStr + (dateStr.match(/\d{4}/) ? "" : `, ${currentYear}`));
-            if (!isNaN(tryDate.getTime()) && dateStr.match(/\d/)) { // Ensure it has digits
+            if (!isNaN(tryDate.getTime()) && dateStr.match(/\d/)) {
                 // Anti-Hallucination: Date() defaults to Jan 1
                 if (tryDate.getMonth() === 0 && tryDate.getDate() === 1 && !lowerDate.includes('jan')) {
                     return null;
@@ -105,21 +105,18 @@ const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: b
         }
 
         if (resultDate) {
-            // Apply Start Time
             resultDate.setHours(startSpec.hours, startSpec.minutes, 0, 0);
 
-            // Calculate End Date
             let resultEndDate: Date | undefined;
             if (endSpec) {
                 resultEndDate = new Date(resultDate);
                 resultEndDate.setHours(endSpec.hours, endSpec.minutes, 0, 0);
-                // Handle overnight? If end < start, assume next day?
                 if (resultEndDate < resultDate) {
                     resultEndDate.setDate(resultEndDate.getDate() + 1);
                 }
             }
 
-            return { date: resultDate, endDate: resultEndDate, isWeekly };
+            return { date: resultDate, endDate: resultEndDate, isWeekly, isMonthly };
         }
 
     } catch (e) {
@@ -139,15 +136,15 @@ const getGoogleCalendarUrl = (event: Event) => {
     const parsed = parseEventDate(event);
     if (parsed) {
         const startDate = parsed.date;
-        // Use parsed end date if available, otherwise default to 1 hour
         const endDate = parsed.endDate || new Date(startDate.getTime() + 60 * 60 * 1000);
 
         const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
         dates = `&dates=${format(startDate)}/${format(endDate)}`;
 
-        // Add recurrence rule for weekly events
         if (parsed.isWeekly) {
             recur = "&recur=RRULE:FREQ=WEEKLY";
+        } else if (parsed.isMonthly) {
+            recur = "&recur=RRULE:FREQ=MONTHLY";
         }
     }
 
@@ -164,8 +161,8 @@ export default async function Events() {
     const upcomingEvents = events
         .filter(event => {
             const parsed = parseEventDate(event);
-            if (!parsed) return true; // Keep if we can't parse, just in case
-            if (parsed.isWeekly) return true; // Always show weekly
+            if (!parsed) return true;
+            if (parsed.isWeekly || parsed.isMonthly) return true; // Always show recurring
             return parsed.date > yesterday;
         })
         .sort((a, b) => {
@@ -203,7 +200,8 @@ export default async function Events() {
                                         <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${event.badge === 'Academic' ? 'bg-green-100 text-green-800' :
                                             event.badge === 'Professional' ? 'bg-purple-100 text-purple-800' :
                                                 event.badge === 'Social' ? 'bg-pink-100 text-pink-800' :
-                                                    'bg-blue-50 text-shpe-blue'
+                                                    event.badge === 'Monthly' ? 'bg-yellow-100 text-yellow-800' :
+                                                        'bg-blue-50 text-shpe-blue'
                                             }`}>
                                             {event.badge || 'General'}
                                         </span>
