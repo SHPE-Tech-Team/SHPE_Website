@@ -18,6 +18,7 @@ export default defineType({
             options: {
                 list: [
                     { title: 'Weekly', value: 'Weekly' },
+                    { title: 'Monthly', value: 'Monthly' },
                     { title: 'Academic', value: 'Academic' },
                     { title: 'Professional', value: 'Professional' },
                     { title: 'Social', value: 'Social' },

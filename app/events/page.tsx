@@ -14,56 +14,114 @@ interface Event {
     badge: string;
 }
 
-const parseEventDate = (event: Event): { date: Date, isWeekly: boolean } | null => {
+const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: boolean } | null => {
     try {
         const now = new Date();
         const currentYear = now.getFullYear();
-        const lowerDate = event.date.toLowerCase();
+        let dateStr = event.date; // precise copy to mutate for detecting day
 
-        // Strategy 1: Handle "Weekly" days (e.g. "Tuesdays, 7:00 PM") or Explicit Weekly Badge
+        let startSpec = { hours: 0, minutes: 0 };
+        let endSpec: { hours: number, minutes: number } | null = null;
+        let foundTime = false;
+
+        // Helper to parse "7:00 PM"
+        const parseTimeSpec = (t: string) => {
+            const match = t.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/i);
+            if (!match) return null;
+            let h = parseInt(match[1]);
+            const m = parseInt(match[2] || "0");
+            const mer = match[3]?.toLowerCase();
+            if (mer === 'pm' && h < 12) h += 12;
+            if (mer === 'am' && h === 12) h = 0;
+            return { hours: h, minutes: m };
+        };
+
+        // 1. Check for Time Range ("6:00 PM - 8:00 PM")
+        const timePattern = `\\d{1,2}(?::\\d{2})?\\s*(?:AM|PM|am|pm)?`;
+        const rangeRegex = new RegExp(`(${timePattern})\\s*(?:-|to)\\s*(${timePattern})`, 'i');
+        const rangeMatch = dateStr.match(rangeRegex);
+
+        if (rangeMatch) {
+            const s = parseTimeSpec(rangeMatch[1]);
+            const e = parseTimeSpec(rangeMatch[2]);
+            if (s && e) {
+                startSpec = s;
+                endSpec = e;
+                foundTime = true;
+                // Remove the time part so we can parse the date part cleanly
+                dateStr = dateStr.replace(rangeMatch[0], '');
+            }
+        }
+
+        // 2. Fallback to Single Time
+        if (!foundTime) {
+            const singleMatch = dateStr.match(new RegExp(`(${timePattern})`, 'i'));
+            if (singleMatch) {
+                const s = parseTimeSpec(singleMatch[1]);
+                if (s) {
+                    startSpec = s;
+                    foundTime = true;
+                    dateStr = dateStr.replace(singleMatch[0], '');
+                }
+            }
+        }
+
+        const lowerDate = dateStr.toLowerCase();
+        let resultDate: Date | null = null;
+        let isWeekly = false;
+
+        // Strategy 1: Handle "Weekly" days
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        const dayIndex = days.findIndex(d => lowerDate.includes(d) || lowerDate.includes(d.slice(0, 3) + 's'));
+        const dayIndex = days.findIndex(d => lowerDate.includes(d) || lowerDate.includes(d.slice(0, 3) + 's')); // "tuesdays" or "tue"
 
         if (event.badge === 'Weekly' || dayIndex !== -1) {
+            isWeekly = true;
             if (dayIndex !== -1) {
-                const resultDate = new Date();
+                resultDate = new Date();
                 const currentDay = resultDate.getDay();
                 let daysUntil = (dayIndex + 7 - currentDay) % 7;
 
-                // If today is the day, check if time passed (approx 8PM cutoff)
+                // If today is the day, check if time passed (approx check based on start hour)
                 if (daysUntil === 0) {
-                    if (resultDate.getHours() > 20) daysUntil = 7;
+                    // If event is later today, keep today. If passed, next week.
+                    const currentHour = now.getHours();
+                    if (currentHour >= startSpec.hours) daysUntil = 7;
                 }
-
                 resultDate.setDate(resultDate.getDate() + daysUntil);
+            }
+        }
 
-                // Extract time
-                const timeMatch = event.date.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/i);
-                if (timeMatch) {
-                    let hours = parseInt(timeMatch[1]);
-                    const minutes = parseInt(timeMatch[2] || "0");
-                    const meridian = timeMatch[3]?.toLowerCase();
+        // Strategy 2: Standard parse only if no weekly logic applied (or weekly logic failed to find day)
+        if (!resultDate) {
+            // "Oct 15" + current year
+            const tryDate = new Date(dateStr + (dateStr.match(/\d{4}/) ? "" : `, ${currentYear}`));
+            if (!isNaN(tryDate.getTime()) && dateStr.match(/\d/)) { // Ensure it has digits
+                // Anti-Hallucination: Date() defaults to Jan 1
+                if (tryDate.getMonth() === 0 && tryDate.getDate() === 1 && !lowerDate.includes('jan')) {
+                    return null;
+                }
+                resultDate = tryDate;
+            }
+        }
 
-                    if (meridian === 'pm' && hours < 12) hours += 12;
-                    if (meridian === 'am' && hours === 12) hours = 0;
+        if (resultDate) {
+            // Apply Start Time
+            resultDate.setHours(startSpec.hours, startSpec.minutes, 0, 0);
 
-                    resultDate.setHours(hours, minutes, 0, 0);
-                    return { date: resultDate, isWeekly: true };
+            // Calculate End Date
+            let resultEndDate: Date | undefined;
+            if (endSpec) {
+                resultEndDate = new Date(resultDate);
+                resultEndDate.setHours(endSpec.hours, endSpec.minutes, 0, 0);
+                // Handle overnight? If end < start, assume next day?
+                if (resultEndDate < resultDate) {
+                    resultEndDate.setDate(resultEndDate.getDate() + 1);
                 }
             }
+
+            return { date: resultDate, endDate: resultEndDate, isWeekly };
         }
 
-        // Strategy 2: Try standard date parsing (e.g. "Oct 15, 6:00 PM")
-        const strictDate = new Date(event.date + (event.date.match(/\d{4}/) ? "" : `, ${currentYear}`));
-
-        if (!isNaN(strictDate.getTime()) && event.date.match(/\d/)) {
-            // Anti-Hallucination: Date() often returns Jan 1 if parsing fails but looks vaguely valid
-            // If result is Jan 1, but string doesn't say "Jan", reject it.
-            if (strictDate.getMonth() === 0 && strictDate.getDate() === 1 && !lowerDate.includes('jan')) {
-                return null;
-            }
-            return { date: strictDate, isWeekly: false };
-        }
     } catch (e) {
         console.error("Date parse error", e);
     }
@@ -81,7 +139,9 @@ const getGoogleCalendarUrl = (event: Event) => {
     const parsed = parseEventDate(event);
     if (parsed) {
         const startDate = parsed.date;
-        const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour default
+        // Use parsed end date if available, otherwise default to 1 hour
+        const endDate = parsed.endDate || new Date(startDate.getTime() + 60 * 60 * 1000);
+
         const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
         dates = `&dates=${format(startDate)}/${format(endDate)}`;
 
@@ -147,7 +207,7 @@ export default async function Events() {
                                             }`}>
                                             {event.badge || 'General'}
                                         </span>
-                                </div>
+                                    </div>
 
                                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">{event.title}</h3>
 
