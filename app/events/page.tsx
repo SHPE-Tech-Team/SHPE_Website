@@ -14,33 +14,109 @@ interface Event {
     badge: string;
 }
 
+const parseEventDate = (event: Event): { date: Date, isWeekly: boolean } | null => {
+    try {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const lowerDate = event.date.toLowerCase();
+
+        // Strategy 1: Handle "Weekly" days (e.g. "Tuesdays, 7:00 PM") or Explicit Weekly Badge
+        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        const dayIndex = days.findIndex(d => lowerDate.includes(d) || lowerDate.includes(d.slice(0, 3) + 's'));
+
+        if (event.badge === 'Weekly' || dayIndex !== -1) {
+            if (dayIndex !== -1) {
+                const resultDate = new Date();
+                const currentDay = resultDate.getDay();
+                let daysUntil = (dayIndex + 7 - currentDay) % 7;
+
+                // If today is the day, check if time passed (approx 8PM cutoff)
+                if (daysUntil === 0) {
+                    if (resultDate.getHours() > 20) daysUntil = 7;
+                }
+
+                resultDate.setDate(resultDate.getDate() + daysUntil);
+
+                // Extract time
+                const timeMatch = event.date.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/i);
+                if (timeMatch) {
+                    let hours = parseInt(timeMatch[1]);
+                    const minutes = parseInt(timeMatch[2] || "0");
+                    const meridian = timeMatch[3]?.toLowerCase();
+
+                    if (meridian === 'pm' && hours < 12) hours += 12;
+                    if (meridian === 'am' && hours === 12) hours = 0;
+
+                    resultDate.setHours(hours, minutes, 0, 0);
+                    return { date: resultDate, isWeekly: true };
+                }
+            }
+        }
+
+        // Strategy 2: Try standard date parsing (e.g. "Oct 15, 6:00 PM")
+        const strictDate = new Date(event.date + (event.date.match(/\d{4}/) ? "" : `, ${currentYear}`));
+
+        if (!isNaN(strictDate.getTime()) && event.date.match(/\d/)) {
+            // Anti-Hallucination: Date() often returns Jan 1 if parsing fails but looks vaguely valid
+            // If result is Jan 1, but string doesn't say "Jan", reject it.
+            if (strictDate.getMonth() === 0 && strictDate.getDate() === 1 && !lowerDate.includes('jan')) {
+                return null;
+            }
+            return { date: strictDate, isWeekly: false };
+        }
+    } catch (e) {
+        console.error("Date parse error", e);
+    }
+    return null;
+};
+
 const getGoogleCalendarUrl = (event: Event) => {
     const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
     const details = encodeURIComponent(event.description || "");
     const location = encodeURIComponent(event.location || "");
     const text = encodeURIComponent(event.title || "");
-
-    // Try to parse date if possible (very basic)
     let dates = "";
-    try {
-        // Append current year if missing to help parsing
-        const dateStr = event.date + (event.date.match(/\d{4}/) ? "" : `, ${new Date().getFullYear()}`);
-        const startDate = new Date(dateStr);
-        if (!isNaN(startDate.getTime())) {
-            // Add 1 hour duration
-            const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
-            const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
-            dates = `&dates=${format(startDate)}/${format(endDate)}`;
+    let recur = "";
+
+    const parsed = parseEventDate(event);
+    if (parsed) {
+        const startDate = parsed.date;
+        const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour default
+        const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
+        dates = `&dates=${format(startDate)}/${format(endDate)}`;
+
+        // Add recurrence rule for weekly events
+        if (parsed.isWeekly) {
+            recur = "&recur=RRULE:FREQ=WEEKLY";
         }
-    } catch (e) {
-        // Ignore parsing errors
     }
 
-    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}`;
+    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}`;
 };
 
 export default async function Events() {
     const events = await client.fetch<Event[]>(EVENTS_QUERY);
+
+    // Filter and Sort Events
+    const now = new Date();
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const upcomingEvents = events
+        .filter(event => {
+            const parsed = parseEventDate(event);
+            if (!parsed) return true; // Keep if we can't parse, just in case
+            if (parsed.isWeekly) return true; // Always show weekly
+            return parsed.date > yesterday;
+        })
+        .sort((a, b) => {
+            const parsedA = parseEventDate(a);
+            const parsedB = parseEventDate(b);
+            const dateA = parsedA?.date;
+            const dateB = parsedB?.date;
+
+            if (!dateA || !dateB) return 0;
+            return dateA.getTime() - dateB.getTime();
+        });
 
     return (
         <div className="bg-white">
@@ -71,7 +147,7 @@ export default async function Events() {
                                             }`}>
                                             {event.badge || 'General'}
                                         </span>
-                                    </div>
+                                </div>
 
                                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">{event.title}</h3>
 
@@ -118,14 +194,14 @@ export default async function Events() {
             </div>
 
             {/* Calendar Embedding Placeholder */}
-            <div className="bg-gray-50 py-16 hidden md:block">
+            {/* <div className="bg-gray-50 py-16 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">Calendar</h2>
                     <div className="bg-white rounded-2xl shadow-sm p-4 h-[600px] flex items-center justify-center border border-gray-200">
                         <iframe src="https://calendar.google.com/calendar/embed?src=shpe.uiuc%40gmail.com&ctz=America%2FChicago" style={{ border: 0 }} width="100%" height="600" frameBorder="0" scrolling="no"></iframe>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
