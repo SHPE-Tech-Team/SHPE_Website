@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { EVENTS_QUERY } from "@/sanity/lib/queries";
+import * as chrono from 'chrono-node';
 
 export const revalidate = 60;
 
@@ -16,113 +17,49 @@ interface Event {
 
 const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: boolean, isMonthly: boolean } | null => {
     try {
-        const now = new Date();
-        const currentYear = now.getFullYear();
-        let dateStr = event.date; // precise copy to mutate for detecting day
+        // Pre-process string to help chrono with quirks like "Sundays" -> "Sunday"
+        let dateStr = event.date;
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        days.forEach(day => {
+            const regex = new RegExp(`${day}s`, 'gi');
+            dateStr = dateStr.replace(regex, day);
+        });
 
-        let startSpec = { hours: 0, minutes: 0 };
-        let endSpec: { hours: number, minutes: number } | null = null;
-        let foundTime = false;
+        // Use chrono to parse natural language date
+        // forwardDate: true ensures we get the next occurrence for things like "Sunday"
+        const parsedResults = chrono.parse(dateStr, new Date(), { forwardDate: true });
 
-        // Helper to parse "7:00 PM"
-        const parseTimeSpec = (t: string) => {
-            const match = t.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/i);
-            if (!match) return null;
-            let h = parseInt(match[1]);
-            const m = parseInt(match[2] || "0");
-            const mer = match[3]?.toLowerCase();
-            if (mer === 'pm' && h < 12) h += 12;
-            if (mer === 'am' && h === 12) h = 0;
-            return { hours: h, minutes: m };
-        };
+        if (parsedResults.length > 0) {
+            const result = parsedResults[0];
+            const resultDate = result.start.date();
+            let resultEndDate = result.end ? result.end.date() : undefined;
 
-        // 1. Check for Time Range ("6:00 PM - 8:00 PM")
-        const timePattern = `\\d{1,2}(?::\\d{2})?\\s*(?:AM|PM|am|pm)?`;
-        const rangeRegex = new RegExp(`(${timePattern})\\s*(?:-|to)\\s*(${timePattern})`, 'i');
-        const rangeMatch = dateStr.match(rangeRegex);
+            // If no end date but we have a start time, maybe default to 1 hour? 
+            // Existing logic didn't explicit default unless in Google URL.
+            // But if chrono didn't find an end time, result.end is null.
 
-        if (rangeMatch) {
-            const s = parseTimeSpec(rangeMatch[1]);
-            const e = parseTimeSpec(rangeMatch[2]);
-            if (s && e) {
-                startSpec = s;
-                endSpec = e;
-                foundTime = true;
-                // Remove the time part so we can parse the date part cleanly
-                dateStr = dateStr.replace(rangeMatch[0], '');
-            }
+            // Handle logical badges
+            const isWeekly = event.badge === 'Weekly';
+            // Handle "Monthly" and the known typo "Monthy"
+            const isMonthly = event.badge === 'Monthly' || event.badge === 'Monthy';
+
+            return {
+                date: resultDate,
+                endDate: resultEndDate,
+                isWeekly,
+                isMonthly
+            };
         }
 
-        // 2. Fallback to Single Time
-        if (!foundTime) {
-            const singleMatch = dateStr.match(new RegExp(`(${timePattern})`, 'i'));
-            if (singleMatch) {
-                const s = parseTimeSpec(singleMatch[1]);
-                if (s) {
-                    startSpec = s;
-                    foundTime = true;
-                    dateStr = dateStr.replace(singleMatch[0], '');
-                }
-            }
-        }
-
-        const lowerDate = dateStr.toLowerCase();
-        let resultDate: Date | null = null;
-        let isWeekly = false;
-        let isMonthly = (event.badge === 'Monthly');
-
-        // Strategy 1: Handle "Weekly" days
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        const dayIndex = days.findIndex(d => lowerDate.includes(d) || lowerDate.includes(d.slice(0, 3) + 's')); // "tuesdays" or "tue"
-
-        if (event.badge === 'Weekly' || (dayIndex !== -1 && !isMonthly)) {
-            // Only force weekly logic if not explicitly monthly
-            isWeekly = true;
-            if (dayIndex !== -1) {
-                resultDate = new Date();
-                const currentDay = resultDate.getDay();
-                let daysUntil = (dayIndex + 7 - currentDay) % 7;
-
-                // If today is the day, check if time passed
-                if (daysUntil === 0) {
-                    const currentHour = now.getHours();
-                    if (currentHour >= startSpec.hours) daysUntil = 7;
-                }
-                resultDate.setDate(resultDate.getDate() + daysUntil);
-            }
-        }
-
-        // Strategy 2: Standard parse (works for Monthly dates like "Oct 15")
-        if (!resultDate) {
-            const tryDate = new Date(dateStr + (dateStr.match(/\d{4}/) ? "" : `, ${currentYear}`));
-            if (!isNaN(tryDate.getTime()) && dateStr.match(/\d/)) {
-                // Anti-Hallucination: Date() defaults to Jan 1
-                if (tryDate.getMonth() === 0 && tryDate.getDate() === 1 && !lowerDate.includes('jan')) {
-                    return null;
-                }
-                resultDate = tryDate;
-            }
-        }
-
-        if (resultDate) {
-            resultDate.setHours(startSpec.hours, startSpec.minutes, 0, 0);
-
-            let resultEndDate: Date | undefined;
-            if (endSpec) {
-                resultEndDate = new Date(resultDate);
-                resultEndDate.setHours(endSpec.hours, endSpec.minutes, 0, 0);
-                if (resultEndDate < resultDate) {
-                    resultEndDate.setDate(resultEndDate.getDate() + 1);
-                }
-            }
-
-            return { date: resultDate, endDate: resultEndDate, isWeekly, isMonthly };
-        }
+        // Fallback for strict dates that might not be picked up if formatted weirdly, 
+        // though chrono is very good. 
+        // If chrono fails, return null which hides the event (safety).
+        return null;
 
     } catch (e) {
         console.error("Date parse error", e);
+        return null;
     }
-    return null;
 };
 
 const getGoogleCalendarUrl = (event: Event) => {
