@@ -138,7 +138,12 @@ const getGoogleCalendarUrl = (event: Event) => {
         const startDate = parsed.date;
         const endDate = parsed.endDate || new Date(startDate.getTime() + 60 * 60 * 1000);
 
-        const format = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, "");
+        // Format as YYYYMMDDTHHmmss using local components (preserves "face value" of the parsed time)
+        const format = (d: Date) => {
+            const pad = (n: number) => n.toString().padStart(2, '0');
+            return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+        };
+
         dates = `&dates=${format(startDate)}/${format(endDate)}`;
 
         if (parsed.isWeekly) {
@@ -148,7 +153,8 @@ const getGoogleCalendarUrl = (event: Event) => {
         }
     }
 
-    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}`;
+    // Force America/Chicago timezone so the "face value" time is interpreted correctly
+    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}&ctz=America/Chicago`;
 };
 
 export default async function Events() {
