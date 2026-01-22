@@ -67,9 +67,12 @@ const parseEventDate = (event: Event): { date: Date, endDate: Date, isWeekly: bo
             if (endPeriod === 'AM' && endHourNum === 12) endHourNum = 0;
             endDate.setHours(endHourNum, parseInt(endMin), 0, 0);
         } else {
-            // For one-time events, use the date field
+            // For one-time events, use the date field (date part only)
             if (!event.date) return null;
-            startDate = new Date(event.date);
+            
+            // Extract just the date part from the ISO datetime (YYYY-MM-DD)
+            const datePart = event.date.split('T')[0];
+            startDate = new Date(datePart + 'T00:00:00');
 
             // Parse start/end times
             const [startHour, startMinuteFull] = event.startTime.split(':');
@@ -110,13 +113,14 @@ const getGoogleCalendarUrl = (event: Event) => {
 
     const parsed = parseEventDate(event);
     if (parsed) {
-        // Format as YYYYMMDDTHHmmss in UTC
-        const formatUTC = (d: Date) => {
+        // Format as YYYYMMDDTHHmmss using "face value" components (server local time)
+        // treating them as floating time, to be pinned to America/Chicago below.
+        const formatFloating = (d: Date) => {
             const pad = (n: number) => n.toString().padStart(2, '0');
-            return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+            return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
         };
 
-        dates = `&dates=${formatUTC(parsed.date)}/${formatUTC(parsed.endDate)}`;
+        dates = `&dates=${formatFloating(parsed.date)}/${formatFloating(parsed.endDate)}`;
 
         if (parsed.isWeekly) {
             recur = "&recur=RRULE:FREQ=WEEKLY";
@@ -125,7 +129,8 @@ const getGoogleCalendarUrl = (event: Event) => {
         }
     }
 
-    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}`;
+    // Force America/Chicago timezone so the "face value" time is interpreted correctly
+    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}&ctz=America/Chicago`;
 };
 
 export default async function Events() {
