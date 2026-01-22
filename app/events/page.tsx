@@ -1,13 +1,15 @@
 import { client } from "@/sanity/lib/client";
 import { EVENTS_QUERY } from "@/sanity/lib/queries";
-import * as chrono from 'chrono-node';
 
 export const revalidate = 60;
 
 interface Event {
     title: string;
     slug: string;
-    date: string;
+    date?: string; // For one-time events (ISO datetime)
+    dayOfWeek?: string; // For recurring events
+    startTime: string; // Format: HH:MM AM/PM
+    endTime: string; // Format: HH:MM AM/PM
     location: string;
     description: string;
     image: string;
@@ -15,47 +17,83 @@ interface Event {
     badge: string;
 }
 
-const parseEventDate = (event: Event): { date: Date, endDate?: Date, isWeekly: boolean, isMonthly: boolean } | null => {
+const parseEventDate = (event: Event): { date: Date, endDate: Date, isWeekly: boolean, isMonthly: boolean } | null => {
     try {
-        // Pre-process string to help chrono with quirks like "Sundays" -> "Sunday"
-        let dateStr = event.date;
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        days.forEach(day => {
-            const regex = new RegExp(`${day}s`, 'gi');
-            dateStr = dateStr.replace(regex, day);
-        });
+        const isWeekly = event.badge === 'Weekly';
+        const isMonthly = event.badge === 'Monthly' || event.badge === 'Monthy';
 
-        // Use chrono to parse natural language date
-        // forwardDate: true ensures we get the next occurrence for things like "Sunday"
-        const parsedResults = chrono.parse(dateStr, new Date(), { forwardDate: true });
+        let startDate: Date;
+        let endDate: Date;
 
-        if (parsedResults.length > 0) {
-            const result = parsedResults[0];
-            const resultDate = result.start.date();
-            let resultEndDate = result.end ? result.end.date() : undefined;
+        if (isWeekly || isMonthly) {
+            // For recurring events, use dayOfWeek + startTime/endTime
+            if (!event.dayOfWeek) return null;
 
-            // If no end date but we have a start time, maybe default to 1 hour? 
-            // Existing logic didn't explicit default unless in Google URL.
-            // But if chrono didn't find an end time, result.end is null.
-
-            // Handle logical badges
-            const isWeekly = event.badge === 'Weekly';
-            // Handle "Monthly" and the known typo "Monthy"
-            const isMonthly = event.badge === 'Monthly' || event.badge === 'Monthy';
-
-            return {
-                date: resultDate,
-                endDate: resultEndDate,
-                isWeekly,
-                isMonthly
+            // Find the next occurrence of this day
+            const now = new Date();
+            const dayMap: { [key: string]: number } = {
+                'Sunday': 0,
+                'Monday': 1,
+                'Tuesday': 2,
+                'Wednesday': 3,
+                'Thursday': 4,
+                'Friday': 5,
+                'Saturday': 6,
             };
+
+            const targetDay = dayMap[event.dayOfWeek];
+            const currentDay = now.getDay();
+            let daysUntilEvent = (targetDay - currentDay + 7) % 7;
+            if (daysUntilEvent === 0) daysUntilEvent = 0; // Today
+
+            startDate = new Date(now);
+            startDate.setDate(startDate.getDate() + daysUntilEvent);
+            startDate.setHours(0, 0, 0, 0); // Reset to midnight
+
+            // Parse start time
+            const [startHour, startMinuteFull] = event.startTime.split(':');
+            const [startMin, startPeriod] = startMinuteFull.split(' ');
+            let hour = parseInt(startHour);
+            if (startPeriod === 'PM' && hour !== 12) hour += 12;
+            if (startPeriod === 'AM' && hour === 12) hour = 0;
+            startDate.setHours(hour, parseInt(startMin), 0, 0);
+
+            // Parse end time
+            endDate = new Date(startDate);
+            const [endHour, endMinuteFull] = event.endTime.split(':');
+            const [endMin, endPeriod] = endMinuteFull.split(' ');
+            let endHourNum = parseInt(endHour);
+            if (endPeriod === 'PM' && endHourNum !== 12) endHourNum += 12;
+            if (endPeriod === 'AM' && endHourNum === 12) endHourNum = 0;
+            endDate.setHours(endHourNum, parseInt(endMin), 0, 0);
+        } else {
+            // For one-time events, use the date field
+            if (!event.date) return null;
+            startDate = new Date(event.date);
+
+            // Parse start/end times
+            const [startHour, startMinuteFull] = event.startTime.split(':');
+            const [startMin, startPeriod] = startMinuteFull.split(' ');
+            let hour = parseInt(startHour);
+            if (startPeriod === 'PM' && hour !== 12) hour += 12;
+            if (startPeriod === 'AM' && hour === 12) hour = 0;
+            startDate.setHours(hour, parseInt(startMin), 0, 0);
+
+            endDate = new Date(startDate);
+            const [endHour, endMinuteFull] = event.endTime.split(':');
+            const [endMin, endPeriod] = endMinuteFull.split(' ');
+            let endHourNum = parseInt(endHour);
+            if (endPeriod === 'PM' && endHourNum !== 12) endHourNum += 12;
+            if (endPeriod === 'AM' && endHourNum === 12) endHourNum = 0;
+            endDate.setHours(endHourNum, parseInt(endMin), 0, 0);
         }
 
-        // Fallback for strict dates that might not be picked up if formatted weirdly, 
-        // though chrono is very good. 
-        // If chrono fails, return null which hides the event (safety).
-        return null;
-
+        return {
+            date: startDate,
+            endDate: endDate,
+            isWeekly,
+            isMonthly
+        };
     } catch (e) {
         console.error("Date parse error", e);
         return null;
@@ -72,16 +110,13 @@ const getGoogleCalendarUrl = (event: Event) => {
 
     const parsed = parseEventDate(event);
     if (parsed) {
-        const startDate = parsed.date;
-        const endDate = parsed.endDate || new Date(startDate.getTime() + 60 * 60 * 1000);
-
-        // Format as YYYYMMDDTHHmmss using local components (preserves "face value" of the parsed time)
-        const format = (d: Date) => {
+        // Format as YYYYMMDDTHHmmss in UTC
+        const formatUTC = (d: Date) => {
             const pad = (n: number) => n.toString().padStart(2, '0');
-            return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+            return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
         };
 
-        dates = `&dates=${format(startDate)}/${format(endDate)}`;
+        dates = `&dates=${formatUTC(parsed.date)}/${formatUTC(parsed.endDate)}`;
 
         if (parsed.isWeekly) {
             recur = "&recur=RRULE:FREQ=WEEKLY";
@@ -90,8 +125,7 @@ const getGoogleCalendarUrl = (event: Event) => {
         }
     }
 
-    // Force America/Chicago timezone so the "face value" time is interpreted correctly
-    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}&ctz=America/Chicago`;
+    return `${baseUrl}&text=${text}&details=${details}&location=${location}${dates}${recur}`;
 };
 
 export default async function Events() {
@@ -157,7 +191,7 @@ export default async function Events() {
                                             <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            {event.date}
+                                            {event.dayOfWeek ? `${event.dayOfWeek}, ${event.startTime} - ${event.endTime}` : `${new Date(event.date!).toLocaleDateString('en-US', { weekday: 'long' })}, ${new Date(event.date!).toLocaleDateString()}, ${event.startTime} - ${event.endTime}`}
                                         </div>
                                         <div className="flex items-center">
                                             <svg className="w-5 h-5 mr-3 text-shpe-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">

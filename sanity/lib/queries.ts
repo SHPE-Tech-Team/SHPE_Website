@@ -40,10 +40,13 @@ export const COMMITTEE_BY_ID_QUERY = groq`*[_type == "committee" && id.current =
   email
 }`
 
-export const EVENTS_QUERY = groq`*[_type == "event"] | order(date asc) {
+export const EVENTS_QUERY = groq`*[_type == "event"] {
   title,
   "slug": slug.current,
   date,
+  dayOfWeek,
+  startTime,
+  endTime,
   location,
   description,
   "image": image.asset->url,
