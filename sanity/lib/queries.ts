@@ -63,3 +63,6 @@ export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(o
   email,
   note
 }`
+
+export const CALENDAR_ID_QUERY = groq`*[_type == "settings"][0].googleCalendarId`
+
