@@ -13,11 +13,12 @@ export default function Navbar() {
         { name: 'Events', href: '/events' },
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
+        { name: 'Committees', href: '/get-involved' },
         { name: 'Contact', href: '/contact' },
     ];
 
     return (
-        <nav className="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100">
+        <nav className="bg-white fixed w-full top-0 z-50 shadow-sm border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20">
                     <div className="flex-shrink-0 flex items-center">
@@ -28,7 +29,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex md:items-center md:space-x-8">
+                    <div className="hidden md:flex md:items-center md:space-x-5">
                         {links.map((link) => (
                             <Link
                                 key={link.name}
@@ -42,7 +43,7 @@ export default function Navbar() {
                             </Link>
                         ))}
                         <Link
-                            href="/get-involved"
+                            href="/join"
                             className="bg-uiuc-orange hover:bg-shpe-orange-dark text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         >
                             Join Now
@@ -74,7 +75,7 @@ export default function Navbar() {
             {/* Mobile Menu (Floating & Curvy) */}
             {isOpen && (
                 <div className="md:hidden absolute top-20 left-4 right-4 mt-2 rounded-3xl bg-white/95 backdrop-blur-xl shadow-2xl border border-gray-100 overflow-hidden z-50 transform origin-top transition-all">
-                    <div className="px-5 pt-6 pb-6 space-y-2">
+                    <div className="px-5 pt-6 pb-6 space-y-4">
                         {links.map((link) => (
                             <Link
                                 key={link.name}

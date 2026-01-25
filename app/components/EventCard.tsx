@@ -7,7 +7,7 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
     return (
-        <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+        <div className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
             <div className="bg-shpe-blue h-2"></div>
             <div className="p-4 sm:p-8 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-2 sm:mb-4">
