@@ -43,7 +43,7 @@ export default function Navbar() {
                             </Link>
                         ))}
                         <Link
-                            href="/get-involved"
+                            href="/join"
                             className="bg-uiuc-orange hover:bg-shpe-orange-dark text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         >
                             Join Now
