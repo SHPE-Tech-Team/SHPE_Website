@@ -1,4 +1,6 @@
 import Link from "next/link";
+import ResourceCard from "../components/ResourceCard";
+import PageHeader from "../components/PageHeader";
 
 export default function Resources() {
     const resources = [
@@ -77,16 +79,11 @@ export default function Resources() {
     return (
         <div className="bg-white min-h-screen">
             {/* Header */}
-            <div className="bg-blue-100 py-16 sm:py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl font-extrabold text-shpe-blue sm:text-5xl sm:tracking-tight lg:text-6xl">
-                        Member Resources
-                    </h1>
-                    <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
-                        Tools and services to support your academic and professional success at UIUC.
-                    </p>
-                </div>
-            </div>
+            <PageHeader
+                title="Member Resources"
+                description="Tools and services to support your academic and professional success at UIUC."
+                bgColorClass="bg-blue-100"
+            />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="space-y-20">
@@ -99,29 +96,13 @@ export default function Resources() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {section.items.map((item, itemIndex) => (
-                                    <a
+                                    <ResourceCard
                                         key={itemIndex}
-                                        href={item.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start"
-                                    >
-                                        <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
-                                            {item.icon}
-                                        </div>
-                                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-shpe-blue transition-colors mb-3">
-                                            {item.name}
-                                        </h3>
-                                        <p className="text-gray-600 leading-relaxed">
-                                            {item.description}
-                                        </p>
-                                        <div className="mt-6 flex items-center text-shpe-orange font-semibold text-sm group-hover:translate-x-2 transition-transform">
-                                            Visit Website
-                                            <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                            </svg>
-                                        </div>
-                                    </a>
+                                        name={item.name}
+                                        description={item.description}
+                                        url={item.url}
+                                        icon={item.icon}
+                                    />
                                 ))}
                             </div>
                         </div>

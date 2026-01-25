@@ -1,3 +1,6 @@
+import InfoCard from "../components/InfoCard";
+import SectionHeader from "../components/SectionHeader";
+
 export default function Sponsors() {
     return (
         <div className="bg-white min-h-screen">
@@ -13,7 +16,7 @@ export default function Sponsors() {
                     <div className="absolute inset-0 bg-black/50" />
                 </div>
 
-                {/* Decorative elements (adjust z-index or opacity if needed, or remove if they clash) */}
+                {/* Decorative elements */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
                     <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
                     <div className="absolute top-1/2 right-0 w-64 h-64 rounded-full bg-shpe-orange blur-3xl"></div>
@@ -35,35 +38,41 @@ export default function Sponsors() {
             {/* Why Sponsor Section */}
             <div className="py-20 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Why Sponsor Us?</h2>
-                        <p className="mt-4 text-xl text-gray-600">Join our mission and gain access to a diverse pool of talented engineers.</p>
-                    </div>
+                    <SectionHeader title="Why Sponsor Us?" description="Join our mission and gain access to a diverse pool of talented engineers." />
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         {/* Card 1 */}
-                        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                                <svg className="w-6 h-6 text-shpe-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">Top Talent Access</h3>
-                            <p className="text-gray-600">Engage directly with motivated engineering students through workshops, tech talks, and career fairs.</p>
-                        </div>
+                        <InfoCard
+                            title="Top Talent Access"
+                            description="Engage directly with motivated engineering students through workshops, tech talks, and career fairs."
+                            icon={
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            }
+                            iconBgColorClass="bg-blue-100"
+                            iconColorClass="text-shpe-blue"
+                        />
+
                         {/* Card 2 */}
-                        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                                <svg className="w-6 h-6 text-shpe-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">Brand Visibility</h3>
-                            <p className="text-gray-600">Maximize your brand&apos;s presence on campus and within the national SHPE network.</p>
-                        </div>
+                        <InfoCard
+                            title="Brand Visibility"
+                            description="Maximize your brand's presence on campus and within the national SHPE network."
+                            icon={
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                            }
+                            iconBgColorClass="bg-blue-100"
+                            iconColorClass="text-shpe-blue"
+                        />
+
                         {/* Card 3 */}
-                        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                                <svg className="w-6 h-6 text-shpe-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">Impact & Diversity</h3>
-                            <p className="text-gray-600">Directly contribute to the retention and graduation of Hispanic engineers in STEM fields.</p>
-                        </div>
+                        <InfoCard
+                            title="Impact & Diversity"
+                            description="Directly contribute to the retention and graduation of Hispanic engineers in STEM fields."
+                            icon={
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            }
+                            iconBgColorClass="bg-blue-100"
+                            iconColorClass="text-shpe-blue"
+                        />
                     </div>
                 </div>
             </div>
@@ -71,10 +80,7 @@ export default function Sponsors() {
             {/* Contact Person Section */}
             <div className="py-24 bg-white">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Get in Touch</h2>
-                        <p className="text-lg text-gray-600">Interested in becoming a sponsor? Contact our External Vice President.</p>
-                    </div>
+                    <SectionHeader title="Get in Touch" description="Interested in becoming a sponsor? Contact our External Vice President." />
 
                     {/* Contact Card */}
                     <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row transform hover:scale-[1.01] transition-transform duration-300">
