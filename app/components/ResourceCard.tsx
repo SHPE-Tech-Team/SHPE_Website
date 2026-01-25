@@ -13,7 +13,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ name, description, url, ico
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start"
+            className="group bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start"
         >
             <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
                 {icon}

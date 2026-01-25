@@ -13,6 +13,7 @@ export default function Navbar() {
         { name: 'Events', href: '/events' },
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
+        { name: 'Committees', href: '/get-involved' },
         { name: 'Contact', href: '/contact' },
     ];
 
@@ -28,7 +29,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex md:items-center md:space-x-8">
+                    <div className="hidden md:flex md:items-center md:space-x-5">
                         {links.map((link) => (
                             <Link
                                 key={link.name}
@@ -74,7 +75,7 @@ export default function Navbar() {
             {/* Mobile Menu (Floating & Curvy) */}
             {isOpen && (
                 <div className="md:hidden absolute top-20 left-4 right-4 mt-2 rounded-3xl bg-white/95 backdrop-blur-xl shadow-2xl border border-gray-100 overflow-hidden z-50 transform origin-top transition-all">
-                    <div className="px-5 pt-6 pb-6 space-y-2">
+                    <div className="px-5 pt-6 pb-6 space-y-4">
                         {links.map((link) => (
                             <Link
                                 key={link.name}

@@ -22,7 +22,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
     link
 }) => {
     return (
-        <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center h-full">
+        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center h-full">
             <div className={`w-16 h-16 ${iconBgColorClass} rounded-full flex items-center justify-center mb-6 ${iconColorClass}`}>
                 {icon}
             </div>

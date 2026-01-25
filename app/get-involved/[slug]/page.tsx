@@ -69,7 +69,7 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
 
                     {/* Quick Details Card */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-2xl shadow-xl text-white">
+                        <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-3xl shadow-xl text-white">
                             <h3 className="text-sm font-bold text-shpe-orange uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Meeting Details</h3>
                             <div className="flex items-start gap-4">
                                 <div className="p-2 bg-shpe-blue/20 rounded-lg">
