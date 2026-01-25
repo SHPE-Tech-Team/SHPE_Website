@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export default async function Events() {
     const events = await client.fetch<Event[]>(EVENTS_QUERY);
-    const calendarId = await client.fetch<string>(CALENDAR_ID_QUERY) || "technicalchairshpeuiuc@gmail.com";
+    const calendarId = await client.fetch<string>(CALENDAR_ID_QUERY) || "c8d37c46f4c51dacdb27fa71cc2321c685de61e4868c3c4ac7a763ed968f7df3@group.calendar.google.com";
 
     // Filter and Sort Events
     const now = new Date();
