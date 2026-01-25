@@ -59,7 +59,7 @@ export default function Home() {
       </section>
 
       {/* Pillars Section */}
-      <section className="pt-12 pb-20 bg-white w-full">
+      <section className="pt-12 pb-20 bg-gradient-to-b from-white to-gray-50/50 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <SectionHeader
@@ -83,8 +83,14 @@ export default function Home() {
       </section>
 
       {/* Stay Connected Section */}
-      <section className="py-20 bg-gray-50 w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gray-50 w-full relative overflow-hidden">
+        {/* Background Blob */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+          <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[80%] bg-blue-100/40 rounded-full blur-3xl opacity-60"></div>
+          <div className="absolute top-[30%] -left-[10%] w-[40%] h-[60%] bg-orange-100/40 rounded-full blur-3xl opacity-60"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn>
             <SectionHeader
               title="Stay connected with SHPE"
@@ -148,19 +154,40 @@ export default function Home() {
       </section>
 
       {/* Call to Action */}
-      <section className="w-full bg-gray-900 text-white py-20 relative overflow-hidden">
+      <section className="w-full relative py-20 overflow-hidden shadow-2xl">
+        {/* Background - Deep Blue Base */}
+        <div className="absolute inset-0 bg-[#001E49]"></div>
+
+        {/* Accents - preventing purple mix */}
+        <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[140%] bg-blue-800/30 rounded-full blur-3xl opacity-60 mix-blend-screen"></div>
+        <div className="absolute -bottom-[50%] -right-[10%] w-[70%] h-[140%] bg-shpe-orange/20 rounded-full blur-3xl opacity-80 mix-blend-screen"></div>
+
+        {/* Pattern Overlay */}
+        <div className="absolute inset-0 opacity-10 bg-[url('/grid.svg')] bg-center"></div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to start your journey?</h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto text-lg">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-6 text-white tracking-tight">
+              Ready to start your journey?
+            </h2>
+            <p className="text-blue-100 mb-10 max-w-2xl mx-auto text-lg md:text-xl font-medium leading-relaxed">
               Join a community of passionate engineers and leaders dedicated to excellence and familia.
             </p>
-            <Link
-              href="/get-involved"
-              className="inline-block bg-white text-shpe-blue px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
-            >
-              Become a Member
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href="/join"
+                className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-[#001E49] bg-white rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+              >
+                Become a Member
+                <svg className="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white border-2 border-white/30 rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+              >
+                Contact Us
+              </Link>
+            </div>
           </FadeIn>
         </div>
       </section>

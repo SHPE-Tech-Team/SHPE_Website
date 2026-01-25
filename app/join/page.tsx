@@ -82,21 +82,21 @@ export default function JoinPage() {
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                         </div>
                                         <h4 className="font-bold text-gray-900 mb-2">Organize Events</h4>
-                                        <p className="text-sm text-gray-600">Plan and execute your own events with guidance from the board.</p>
+                                        <p className="text-sm text-gray-600">Collaborate with other first year students and plan fundraisers and events</p>
                                     </div>
                                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-blue-50">
                                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4 text-shpe-blue">
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                         </div>
                                         <h4 className="font-bold text-gray-900 mb-2">Mentorship</h4>
-                                        <p className="text-sm text-gray-600">Get paired with an upperclassman mentor to navigate college life.</p>
+                                        <p className="text-sm text-gray-600">Get paired with an upperclassman mentor to navigate college.</p>
                                     </div>
                                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-blue-50">
                                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4 text-shpe-blue">
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         </div>
                                         <h4 className="font-bold text-gray-900 mb-2">Fun Socials</h4>
-                                        <p className="text-sm text-gray-600">Exclusive retreats, dinners, and game nights just for freshmen.</p>
+                                        <p className="text-sm text-gray-600">Join us for fun social events and activities.</p>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@ export default function JoinPage() {
                     <FadeIn delay={0.5}>
                         <SectionHeader
                             title="3. Take the Next Step"
-                            description="Ready to dive in deeper? Join a committee or come to our next event."
+                            description="Join a committee or come to our next event."
                         />
                     </FadeIn>
 
