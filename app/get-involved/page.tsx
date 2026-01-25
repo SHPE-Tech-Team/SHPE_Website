@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import { COMMITTEES_QUERY } from "@/sanity/lib/queries";
-import { Committee } from "@/app/data/committees"; // Keep interface for type safety if needed, or define locally
+import { Committee } from "@/app/data/committees";
+import CommitteeCard from "../components/CommitteeCard";
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -46,36 +47,7 @@ export default async function GetInvolved() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {committees.map((committee) => (
-                        <Link
-                            key={committee.id}
-                            href={`/get-involved/${committee.id}`}
-                            className="group bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden block"
-                        >
-                            {/* Decorative top accent */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-shpe-blue to-shpe-orange transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-
-                            {/* Header */}
-                            <div className="mb-6">
-                                <h3 className="text-sm font-bold text-shpe-orange tracking-wider uppercase mb-2">Committee</h3>
-                                <h2 className="text-2xl font-extrabold text-gray-900 group-hover:text-shpe-blue transition-colors">{committee.title}</h2>
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-gray-600 mb-8 leading-relaxed line-clamp-3">
-                                {committee.shortDescription}
-                            </p>
-
-
-                            {/* Actions */}
-                            <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
-                                <span className="text-shpe-blue font-bold group-hover:text-shpe-orange transition-colors flex items-center">
-                                    Learn More
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </Link>
+                        <CommitteeCard key={committee.id} committee={committee} />
                     ))}
                 </div>
             </div>
