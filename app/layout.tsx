@@ -23,7 +23,7 @@ export default function RootLayout({
         className={`${inter.className} antialiased`}
       >
         <Navbar />
-        <main className="flex-grow">
+        <main className="flex-grow pt-20">
           {children}
         </main>
         <Footer />
