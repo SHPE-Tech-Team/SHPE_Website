@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SHPE UIUC",
-  description: "Official website of SHPE UIUC",
+  title: "SHPE UIUC | University of Illinois at Urbana Champaign",
+  description: "Official website for SHPE at UIUC. Empowering the Hispanic community at the University of Illinois at Urbana Champaign Grainger College of Engineering through professional development, EOH projects, and community.",
 };
 
 import Navbar from "./components/Navbar";
