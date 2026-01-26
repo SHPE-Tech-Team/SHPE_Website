@@ -13,6 +13,12 @@ export default function Footer() {
                         <p className="mt-4 text-gray-500 text-sm leading-relaxed">
                             Empowering the Hispanic community to realize its fullest potential and to impact the world through STEM awareness, access, support, and development.
                         </p>
+                        <div className="mt-6 text-sm text-gray-500 not-italic">
+                            <p className="font-semibold text-gray-900 mb-1">Office Location:</p>
+                            <p>Engineering Hall 103A</p>
+                            <p>1308 W Green St.</p>
+                            <p>Urbana, IL 61801</p>
+                        </div>
                     </div>
 
                     <div>
