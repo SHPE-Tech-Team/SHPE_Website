@@ -30,7 +30,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex md:items-center md:space-x-5">
+                    <div className="hidden md:flex md:items-center md:space-x-3">
                         {links.map((link) => (
                             <Link
                                 key={link.name}
