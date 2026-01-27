@@ -128,10 +128,6 @@ export default function SHPEtinasPage() {
                                     <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">Lesly Beiza Medrano</h2>
                                     <p className="text-gray-400 font-medium text-xl mt-2 tracking-wide">SHPEtinas Lead</p>
                                 </div>
-{/* 
-                                <p className="text-gray-600 text-xl leading-relaxed font-light">
-                                    "We are building more than just a resume. We are building a legacy. Every step we take forward opens a door for the next generation of Latina engineers. Join us in making a difference."
-                                </p> */}
 
                                 <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
                                     <Link href="https://www.linkedin.com/in/lesly-beiza/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-[#0077b5] text-white rounded-full font-bold hover:bg-[#006396] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
