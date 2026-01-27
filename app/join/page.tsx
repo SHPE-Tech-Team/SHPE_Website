@@ -113,7 +113,7 @@ export default function JoinPage() {
                         />
                     </FadeIn>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
                         <FadeIn delay={0.6} className="h-full">
                             <Link href="/get-involved" className="group h-full block">
                                 <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center text-center relative overflow-hidden">
@@ -145,6 +145,24 @@ export default function JoinPage() {
                                     </p>
                                     <span className="mt-auto bg-white border-2 border-shpe-blue text-shpe-blue px-6 py-2 rounded-full font-bold group-hover:bg-shpe-blue group-hover:text-white transition-all">
                                         View Calendar
+                                    </span>
+                                </div>
+                            </Link>
+                        </FadeIn>
+
+                        <FadeIn delay={0.8} className="h-full">
+                            <Link href="/shpetinas" className="group h-full block">
+                                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center text-center relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-bl-full -mr-8 -mt-8 z-0 transition-transform group-hover:scale-150 duration-500"></div>
+                                    <div className="relative z-10 w-20 h-20 bg-pink-100 rounded-2xl flex items-center justify-center mb-6 text-pink-500">
+                                        <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-pink-500 transition-colors">SHPEtinas</h3>
+                                    <p className="text-gray-600 mb-8 leading-relaxed">
+                                        Empowering Latinas in STEM. Join a supportive community dedicated to leadership and innovation.
+                                    </p>
+                                    <span className="mt-auto bg-white border-2 border-pink-500 text-pink-500 px-6 py-2 rounded-full font-bold group-hover:bg-pink-500 group-hover:text-white transition-all">
+                                        Learn More
                                     </span>
                                 </div>
                             </Link>

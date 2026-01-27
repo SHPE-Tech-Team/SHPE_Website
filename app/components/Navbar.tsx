@@ -14,6 +14,7 @@ export default function Navbar() {
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
         { name: 'Committees', href: '/get-involved' },
+        { name: 'SHPEtinas', href: '/shpetinas' },
         { name: 'Contact', href: '/contact' },
     ];
 
@@ -29,7 +30,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex md:items-center md:space-x-5">
+                    <div className="hidden md:flex md:items-center md:space-x-3">
                         {links.map((link) => (
                             <Link
                                 key={link.name}

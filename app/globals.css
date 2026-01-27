@@ -7,6 +7,7 @@
   --color-shpe-orange-dark: #cc3d10;
   --color-uiuc-orange: #FF5F05;
   --color-uiuc-blue: #13294B;
+  --color-shpetinas-pink: #FFC0CB;
   --color-background: #ffffff;
   --color-foreground: #171717;
   --font-sans: var(--font-geist-sans);
@@ -18,9 +19,42 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
     }
   }
 }
