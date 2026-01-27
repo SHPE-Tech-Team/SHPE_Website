@@ -14,6 +14,7 @@ export default function Navbar() {
         { name: 'Resources', href: '/resources' },
         { name: 'Sponsors', href: '/sponsors' },
         { name: 'Committees', href: '/get-involved' },
+        { name: 'SHPEtinas', href: '/shpetinas' },
         { name: 'Contact', href: '/contact' },
     ];
 
