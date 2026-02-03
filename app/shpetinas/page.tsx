@@ -1,12 +1,45 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "../components/FadeIn";
-import SectionHeader from "../components/SectionHeader";
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import { client } from "@/sanity/lib/client";
+import { SHPETINA_GALLERY_QUERY, SHPETINA_SPOTLIGHT_QUERY } from "@/sanity/lib/queries";
 
-export default function SHPEtinasPage() {
+export const revalidate = 60;
+
+interface ShpetinaImage {
+    id: string;
+    title?: string;
+    imageUrl: string;
+    alt?: string;
+}
+
+interface ShpetinaSpotlight {
+    name: string;
+    role: string;
+    imageUrl: string;
+    socialLinks?: {
+        platform: string;
+        url: string;
+        label?: string;
+    }[];
+}
+
+export default async function SHPEtinasPage() {
+    const images = await client.fetch<ShpetinaImage[]>(SHPETINA_GALLERY_QUERY);
+    const spotlight = await client.fetch<ShpetinaSpotlight>(SHPETINA_SPOTLIGHT_QUERY);
+
+    const lead: ShpetinaSpotlight = spotlight || {
+        name: "Lesly Beiza Medrano",
+        role: "SHPEtinas Lead",
+        imageUrl: "/shpetina.jpg",
+        socialLinks: [
+            { platform: 'linkedin', url: 'https://www.linkedin.com/in/lesly-beiza/', label: 'Connect on LinkedIn' },
+            { platform: 'slack', url: '#', label: 'Slack' }
+        ]
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-white overflow-hidden selection:bg-pink-200">
 
@@ -15,38 +48,30 @@ export default function SHPEtinasPage() {
         Mobile: Full height, text bottom overlay.
         Desktop: Split screen diagonal.
       */}
-            {/* 
-        HERO SECTION: Editorial/Asymmetrical 
-        Mobile: Full height, text bottom overlay.
-        Desktop: Split screen diagonal.
-      */}
-            {/* 
-        HERO SECTION: Simple Side-by-Side
-      */}
             <section className="w-full min-h-[80vh] flex flex-col md:flex-row items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-0 gap-8">
 
                 {/* Left Content */}
                 <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <div className="space-y-6 relative">
-                            <span className="inline-block py-1.5 px-4 border border-pink-300 rounded-full text-xs md:text-sm font-mono tracking-widest text-[var(--color-shpetinas-pink)] uppercase bg-pink-50/50">
-                                Empower • Lead • Innovate
+                    <div className="space-y-6 relative">
+                        <span className="inline-block py-1.5 px-4 border border-pink-300 rounded-full text-xs md:text-sm font-mono tracking-widest text-[var(--color-shpetinas-pink)] uppercase bg-pink-50/50">
+                            Empower • Lead • Innovate
+                        </span>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.9] tracking-tighter">
+                            SHPE<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-shpetinas-pink)] to-purple-600">
+                                Tinas.
                             </span>
-                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.9] tracking-tighter">
-                                SHPE<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-shpetinas-pink)] to-purple-600">
-                                    Tinas.
-                                </span>
-                            </h1>
-                            <p className="text-lg md:text-xl text-gray-600 max-w-lg font-medium leading-relaxed mt-4">
-                                Redefining the face of STEM. We are a force of culture, resilience, and brilliance.
-                            </p>
-                            <div className="pt-6">
-                                <Link href="#mission" className="group inline-flex items-center gap-3 text-lg font-bold text-gray-900 hover:text-[var(--color-shpetinas-pink)] transition-colors">
-                                    Explore Mission
-                                    <span className="w-16 h-[2px] bg-gray-200 group-hover:bg-[var(--color-shpetinas-pink)] transition-colors"></span>
-                                </Link>
-                            </div>
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-600 max-w-lg font-medium leading-relaxed mt-4">
+                            Redefining the face of STEM. We are a force of culture, resilience, and brilliance.
+                        </p>
+                        <div className="pt-6">
+                            <Link href="#mission" className="group inline-flex items-center gap-3 text-lg font-bold text-gray-900 hover:text-[var(--color-shpetinas-pink)] transition-colors">
+                                Explore Mission
+                                <span className="w-16 h-[2px] bg-gray-200 group-hover:bg-[var(--color-shpetinas-pink)] transition-colors"></span>
+                            </Link>
                         </div>
+                    </div>
                 </div>
 
                 {/* Right Image Container - Polaroid Style */}
@@ -90,12 +115,6 @@ export default function SHPEtinasPage() {
             </div>
 
             {/* 
-        MISSION SECTION: Typography Driven
-      */}
-
-
-
-            {/* 
         LEAD SHOWCASE: 
       */}
             <section className="py-32 bg-white relative">
@@ -113,8 +132,8 @@ export default function SHPEtinasPage() {
 
                                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl relative z-10 group border-4 border-white">
                                     <Image
-                                        src="/shpetina.jpg"
-                                        alt="Lesly Beiza Medrano"
+                                        src={lead.imageUrl}
+                                        alt={lead.name}
                                         fill
                                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                                     />
@@ -125,18 +144,47 @@ export default function SHPEtinasPage() {
                             <div className="text-center md:text-left space-y-8 flex-1">
                                 <div>
                                     <h4 className="text-[var(--color-shpetinas-pink)] font-bold text-sm tracking-[0.2em] uppercase mb-3">Leadership Spotlight</h4>
-                                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">Lesly Beiza Medrano</h2>
-                                    <p className="text-gray-400 font-medium text-xl mt-2 tracking-wide">SHPEtinas Lead</p>
+                                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">{lead.name}</h2>
+                                    <p className="text-gray-400 font-medium text-xl mt-2 tracking-wide">{lead.role}</p>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
-                                    <Link href="https://www.linkedin.com/in/lesly-beiza/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-[#0077b5] text-white rounded-full font-bold hover:bg-[#006396] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                        Connect on LinkedIn
-                                        <ArrowRightIcon className="w-5 h-5" />
-                                    </Link>
-                                    <p className="text-gray-500 font-medium">
-                                        or reach out on <span className="font-bold text-black">Slack</span>!
-                                    </p>
+                                <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 flex-wrap">
+                                    {lead.socialLinks?.map((link, index) => {
+                                        if (index === 0) {
+                                            // Primary Link (First one in list)
+                                            return (
+                                                <Link
+                                                    key={index}
+                                                    href={link.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#0077b5] text-white rounded-full font-bold hover:bg-[#006396] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                                                >
+                                                    {link.label || `Connect on ${link.platform || 'LinkedIn'}`}
+                                                    <ArrowRightIcon className="w-5 h-5" />
+                                                </Link>
+                                            );
+                                        } else {
+                                            // Secondary Links
+                                            return (
+                                                <div key={index} className="flex items-center gap-2">
+                                                    {index === 1 && <span className="text-gray-400 font-medium hidden sm:inline">or</span>}
+                                                    <Link
+                                                        href={link.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-gray-500 hover:text-[var(--color-shpetinas-pink)] font-bold transition-colors border-b-2 border-transparent hover:border-[var(--color-shpetinas-pink)]"
+                                                    >
+                                                        {link.label || `reach out on ${link.platform}`}
+                                                    </Link>
+                                                </div>
+                                            );
+                                        }
+                                    })}
+
+                                    {(!lead.socialLinks || lead.socialLinks.length === 0) && (
+                                        <p className="text-gray-500 font-medium italic">Reach out via Slack!</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -162,26 +210,48 @@ export default function SHPEtinasPage() {
                             SHPEtinas is a program dedicated to accelerating and affirming the presence of Latinas in STEM. We provide a space for our members to connect, grow, and inspire one another.
                         </p>
 
-                        {/* Centered Stats - No Borders + Staggered Animation */}
-                        <div className="flex flex-row justify-center gap-12 md:gap-24 py-12">
-                            <div className="text-center transform hover:scale-110 transition-transform duration-300">
-                                <h4 className="text-[var(--color-shpetinas-pink)] text-6xl font-black tracking-tighter mb-2">35%</h4>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Growth</p>
+                        {/* Gallery Section from Sanity */}
+                        {images.length > 0 ? (
+                            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 py-12 px-2">
+                                {images.map((img, idx) => (
+                                    <div
+                                        key={img.id}
+                                        className={`relative group overflow-hidden rounded-3xl shadow-lg break-inside-avoid transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${idx % 3 === 0 ? 'aspect-[3/4]' : idx % 3 === 1 ? 'aspect-square' : 'aspect-[4/5]'}`}
+                                    >
+                                        <div className="relative w-full h-full">
+                                            <Image
+                                                src={img.imageUrl}
+                                                alt={img.alt || img.title || "SHPEtina Gallery Image"}
+                                                width={600}
+                                                height={800}
+                                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
+                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                {img.title && (
+                                                    <p className="text-white font-bold text-xl tracking-tight mb-1">{img.title}</p>
+                                                )}
+                                                <div className="w-12 h-1 bg-[var(--color-shpetinas-pink)] rounded-full"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="text-center transform hover:scale-110 transition-transform duration-300 delay-100">
-                                <h4 className="text-purple-600 text-6xl font-black tracking-tighter mb-2">100+</h4>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Members</p>
+                        ) : (
+                            <div className="py-20 bg-gray-50/50 rounded-3xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-center">
+                                <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4 text-[var(--color-shpetinas-pink)]">
+                                    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <h4 className="text-xl font-bold text-gray-900 mb-2">Moments Loading...</h4>
+                                <p className="text-gray-500 max-w-sm">We're gathering the best memories. Check back soon/add images in Sanity!</p>
                             </div>
-                            <div className="text-center hidden sm:block transform hover:scale-110 transition-transform duration-300 delay-200">
-                                <h4 className="text-[var(--color-shpetinas-pink)] text-6xl font-black tracking-tighter mb-2">50+</h4>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Events</p>
-                            </div>
-                        </div>
+                        )}
                     </FadeIn>
                 </div>
             </section>
-
-
 
             {/* MARQUEE / FOOTER CALL */}
             <div className="bg-[var(--color-shpetinas-pink)] py-6 overflow-hidden">

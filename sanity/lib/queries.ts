@@ -50,3 +50,16 @@ export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(o
   note
 }`
 
+export const SHPETINA_GALLERY_QUERY = groq`* [_type == "shpetina"] {
+    "id": _id,
+    title,
+    "imageUrl": image.asset-> url,
+      "alt": image.alt
+}`
+
+export const SHPETINA_SPOTLIGHT_QUERY = groq`*[_type == "shpetinaSpotlight"][0] {
+  name,
+  role,
+  "imageUrl": image.asset->url,
+  socialLinks
+}`
