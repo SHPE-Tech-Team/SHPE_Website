@@ -40,20 +40,6 @@ export const COMMITTEE_BY_ID_QUERY = groq`*[_type == "committee" && id.current =
   email
 }`
 
-export const EVENTS_QUERY = groq`*[_type == "event"] {
-  title,
-  "slug": slug.current,
-  date,
-  dayOfWeek,
-  startTime,
-  endTime,
-  location,
-  description,
-  "image": image.asset->url,
-  rsvpLink,
-  badge
-}`
-
 export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(order asc) {
   name,
   role,
@@ -64,5 +50,16 @@ export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(o
   note
 }`
 
-export const CALENDAR_ID_QUERY = groq`*[_type == "settings"][0].googleCalendarId`
+export const SHPETINA_GALLERY_QUERY = groq`* [_type == "shpetina"] {
+    "id": _id,
+    title,
+    "imageUrl": image.asset-> url,
+      "alt": image.alt
+}`
 
+export const SHPETINA_SPOTLIGHT_QUERY = groq`*[_type == "shpetinaSpotlight"][0] {
+  name,
+  role,
+  "imageUrl": image.asset->url,
+  socialLinks
+}`
