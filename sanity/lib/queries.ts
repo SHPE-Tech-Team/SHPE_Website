@@ -6,6 +6,7 @@ export const COMMITTEES_QUERY = groq`*[_type == "committee"] {
   shortDescription,
   fullDescription,
   "image": image.asset->url,
+  "gallery": gallery[].asset->url,
   meeting,
   leads[] {
     name,
@@ -26,6 +27,7 @@ export const COMMITTEE_BY_ID_QUERY = groq`*[_type == "committee" && id.current =
   shortDescription,
   fullDescription,
   "image": image.asset->url,
+  "gallery": gallery[].asset->url,
   meeting,
   leads[] {
     name,

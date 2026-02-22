@@ -13,6 +13,7 @@ interface Committee {
     email: string;
     meeting: string;
     image?: string;
+    gallery?: string[];
     leads?: { name: string; role: string; image?: string }[];
     links?: { label: string; url: string }[];
 }
@@ -120,7 +121,11 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {committee.leads.map((lead: any, idx: number) => (
                                 <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                    <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
+                                    {lead.image ? (
+                                        <img src={lead.image} alt={lead.name} className="w-16 h-16 object-cover rounded-full mb-4" />
+                                    ) : (
+                                        <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
+                                    )}
                                     <h4 className="text-xl font-bold text-gray-900">{lead.name}</h4>
                                     <p className="text-gray-500">{lead.role}</p>
                                 </div>
@@ -142,33 +147,30 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                 </div>
             </section>
 
-            {/* Gallery / Activity Placeholder */}
-            <section className="py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-sm font-bold text-gray-400 tracking-[0.2em] uppercase mb-4">Highlights</h2>
-                        <h3 className="text-3xl font-bold text-gray-900">Captured Moments</h3>
-                    </div>
+            {/* Gallery Section */}
+            {committee.gallery && committee.gallery.length > 0 && (
+                <section className="py-24 bg-white">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-sm font-bold text-gray-400 tracking-[0.2em] uppercase mb-4">Highlights</h2>
+                            <h3 className="text-3xl font-bold text-gray-900">Captured Moments</h3>
+                        </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-96">
-                        <div className="bg-gray-100 rounded-2xl h-full col-span-2 row-span-2 relative overflow-hidden group">
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-medium bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                                Feature Photo
-                            </div>
-                        </div>
-                        <div className="bg-gray-100 rounded-2xl h-full relative overflow-hidden group">
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-medium bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                                Activity 1
-                            </div>
-                        </div>
-                        <div className="bg-gray-100 rounded-2xl h-full relative overflow-hidden group">
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-medium bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                                Activity 2
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:h-96">
+                            {committee.gallery.slice(0, 3).map((imgUrl, i) => (
+                                <div key={i} className={`bg-gray-100 rounded-2xl relative overflow-hidden group ${i === 0 ? 'col-span-2 row-span-2 h-96 md:h-full' : 'h-48 md:h-full'}`}>
+                                    <img
+                                        src={imgUrl}
+                                        alt={`Gallery image ${i + 1}`}
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Resources & Links (Optional) */}
             {committee.links && committee.links.length > 0 && (
