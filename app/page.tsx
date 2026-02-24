@@ -22,14 +22,9 @@ export default function Home() {
       <HeroCarousel />
 
 
-      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-8 flex gap-8 items-start">
+      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-8 mb-8 flex flex-col md:flex-row gap-8 items-stretch rounded-3xl bg-white">
         {/* Stay Connected Section */}
-        <section className="flex-1 py-8 bg-gray-50 w-full relative overflow-hidden rounded-lg">
-          {/* Background Blob */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-            <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[80%] bg-blue-100/40 rounded-full blur-3xl opacity-60"></div>
-            <div className="absolute top-[30%] -left-[10%] w-[40%] h-[60%] bg-orange-100/40 rounded-full blur-3xl opacity-60"></div>
-          </div>
+        <section className="flex-1 pt-8 pb-12 relative overflow-hidden rounded-lg" >
 
           <div className="max-w-6xl mx-auto px-4 sm:px-4 lg:px-6 relative z-10">
             <FadeIn>
@@ -98,8 +93,8 @@ export default function Home() {
         </section>
 
         {/* Event Highlights on the right */}
-        <div className="flex-1 py-8 bg-gray-50 w-full relative overflow-hidden rounded-lg">
-          <div className="h-full w-full bg-black">
+        <div className="flex-1 min-h-100 md:min-h-0 pt-12 pb-12 relative overflow-hidden rounded-lg ">
+          <div className="h-full w-full">
             <EventHighlights />
           </div>
         </div>

@@ -7,21 +7,15 @@ import Image from "next/image";
 const SLIDES = [
     {
         id: 1,
-        image: "/post_example.png",
-        alt: "SHPE UIUC Community",
+        image: "/SHPE_annou.png",
+        alt: "SHPE UIUC Announcement1",
         color: "bg-slate-800" // Fallback
     },
     {
         id: 2,
-        image: "/SHPECON_2025_2.JPG",
-        alt: "SHPE UIUC Community 2",
+        image: "/SHPE_2ann.png",
+        alt: "SHPE UIUC Announcement2",
         color: "bg-slate-800"
-    },
-    {
-        id: 3,
-        image: "/SHPECON_sheesh.JPG",
-        alt: "SHPE UIUC Community 3",
-        color: "bg-slate-900"
     },
 ];
 
@@ -36,7 +30,7 @@ export default function EventHighlights() {
     }, []);
 
     return (
-        <section className="relative h-[400px] w-[400px] overflow-hidden bg-gray-900 text-white">
+        <section className="absolute inset-0 overflow-hidden rounded-3xl">
             {/* Background Slides */}
             {SLIDES.map((slide, index) => (
                 <div
@@ -57,7 +51,7 @@ export default function EventHighlights() {
                     ) : (
                         /* Placeholder Background */
                         <div className={`w-full h-full ${slide.color} flex items-center justify-center`}>
-                            <div className="text-white/10 text-6xl font-black rotate-12 select-none">
+                            <div className="text-6xl font-black rotate-12 select-none">
                                 {slide.alt}
                             </div>
                         </div>
