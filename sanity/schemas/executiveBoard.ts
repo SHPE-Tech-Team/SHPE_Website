@@ -51,6 +51,15 @@ export default defineType({
             type: 'number',
             description: 'Used to sort the members on the page',
         }),
+        defineField({
+            name: 'photo',
+            title: 'Member Photo',
+            type: 'image',
+            description: 'Upload a photo of the member',
+            options: {
+                hotspot: true,
+            },
+        }),
     ],
     preview: {
         select: {

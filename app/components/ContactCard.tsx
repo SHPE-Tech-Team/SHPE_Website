@@ -2,12 +2,13 @@ import React from 'react';
 
 interface Contact {
     name: string;
-    role: string; // The schema says 'role' but UI was mapping it. Let's stick to standard names.
+    role: string;
     pronouns: string;
     year: string;
     major: string;
     email: string;
     note: string;
+    photoUrl?: string;
 }
 
 interface ContactCardProps {
@@ -19,6 +20,17 @@ const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
         <div className="group bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
             {/* Decorative top accent */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-shpe-blue to-shpe-orange transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+
+            {/* Photo */}
+            {contact.photoUrl && (
+                <div className="mb-6 -mx-8 -mt-8 mb-6">
+                    <img
+                        src={contact.photoUrl}
+                        alt={contact.name}
+                        className="w-full h-64 object-cover rounded-t-3xl"
+                    />
+                </div>
+            )}
 
             {/* Header */}
             <div className="mb-6">

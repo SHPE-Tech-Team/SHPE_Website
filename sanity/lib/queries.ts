@@ -49,7 +49,8 @@ export const EXECUTIVE_BOARD_QUERY = groq`*[_type == "executiveBoard"] | order(o
   year,
   major,
   email,
-  note
+  note,
+  "photoUrl": photo.asset->url
 }`
 
 export const SHPETINA_GALLERY_QUERY = groq`* [_type == "shpetina"] {
