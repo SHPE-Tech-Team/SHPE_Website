@@ -13,6 +13,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     siteName: "SHPE UIUC",
+    title: "SHPE UIUC | University of Illinois at Urbana Champaign",
+    description: "Official website for SHPE at UIUC. Empowering the Hispanic community at the University of Illinois at Urbana Champaign Grainger College of Engineering through professional development, EOH projects, and community.",
+    url: "https://shpe-website-ten.vercel.app",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SHPE UIUC",
+      },
+    ],
   },
   icons: {
     icon: "/logo.png",
