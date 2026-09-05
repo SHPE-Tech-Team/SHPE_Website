@@ -44,7 +44,7 @@ export default function EventHighlights() {
                                 src={slide.image}
                                 alt={slide.alt || "Hero Image"}
                                 fill
-                                className="object-cover object-center"
+                                className="object-cover object-top"
                                 priority={index === 0}
                             />
                         </div>

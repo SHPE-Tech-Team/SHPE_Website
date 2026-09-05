@@ -93,7 +93,7 @@ export default function Home() {
         </section>
 
         {/* Event Highlights on the right */}
-        <div className="flex-1 min-h-100 md:min-h-0 pt-12 pb-12 relative overflow-hidden rounded-lg ">
+        <div className="flex-1 min-h-[28rem] md:min-h-0 my-8 relative overflow-hidden rounded-2xl shadow-lg">
           <div className="h-full w-full">
             <EventHighlights />
           </div>

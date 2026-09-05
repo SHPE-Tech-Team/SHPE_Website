@@ -156,9 +156,9 @@ export default async function CommitteePage(props: { params: Promise<{ slug: str
                             <h3 className="text-3xl font-bold text-gray-900">Captured Moments</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:h-96">
-                            {committee.gallery.slice(0, 3).map((imgUrl, i) => (
-                                <div key={i} className={`bg-gray-100 rounded-2xl relative overflow-hidden group ${i === 0 ? 'col-span-2 row-span-2 h-96 md:h-full' : 'h-48 md:h-full'}`}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 md:h-auto lg:h-[48rem]">
+                            {committee.gallery.slice(0, 5).map((imgUrl, i) => (
+                                <div key={i} className={`bg-gray-100 rounded-2xl relative overflow-hidden group h-48 md:h-64 lg:h-full ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}>
                                     <img
                                         src={imgUrl}
                                         alt={`Gallery image ${i + 1}`}
