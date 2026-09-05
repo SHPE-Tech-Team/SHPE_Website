@@ -24,9 +24,9 @@ export default function Footer() {
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">Navigation</h3>
                         <ul className="space-y-3">
-                            {/* <li><Link href="/" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Home</Link></li> */}
-                            <li><Link href="/about" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">About Us</Link></li>
-                            {/* <li><Link href="/events" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Events</Link></li> */}
+                            <li><Link href="/" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Home</Link></li>
+                            <li><Link href="/events" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Events</Link></li>
+                            <li><Link href="/get-involved" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Committees</Link></li>
                             <li><Link href="/contact" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Contact</Link></li>
                         </ul>
                     </div>
@@ -36,23 +36,31 @@ export default function Footer() {
                         <ul className="space-y-3">
                             <li><Link href="/resources" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Member Resources</Link></li>
                             <li><Link href="/sponsors" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Sponsorship</Link></li>
-                            <li><Link href="/get-involved" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Join SHPE</Link></li>
+                            <li><Link href="/join" className="text-base text-gray-500 hover:text-shpe-orange transition-colors">Join SHPE</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">Connect</h3>
                         <ul className="space-y-3">
-                            <li><Link href="https://join.slack.com/t/shpe-uiuc/shared_invite/zt-3bb1v0tpc-nmf3p9VJTEpLtX1tjb~iBw" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">Slack</Link></li>
-                            <li><Link href="https://www.instagram.com/shpe_uiuc/?hl=en" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">Instagram</Link></li>
-                            <li><Link href="https://www.linkedin.com/company/society-of-hispanic-professional-engineers-uiuc-chapter/posts/?feedView=all" className="text-base text-gray-500 hover:text-shpe-blue transition-colors">LinkedIn</Link></li>
+                            <li><Link href="https://join.slack.com/t/shpe-uiuc/shared_invite/zt-3bb1v0tpc-nmf3p9VJTEpLtX1tjb~iBw" className="text-base text-gray-500 hover:text-shpe-blue transition-colors" target="_blank" rel="noopener noreferrer">Slack</Link></li>
+                            <li><Link href="https://www.instagram.com/shpe_uiuc/?hl=en" className="text-base text-gray-500 hover:text-shpe-blue transition-colors" target="_blank" rel="noopener noreferrer">Instagram</Link></li>
+                            <li><Link href="https://www.linkedin.com/company/society-of-hispanic-professional-engineers-uiuc-chapter/posts/?feedView=all" className="text-base text-gray-500 hover:text-shpe-blue transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
-                    <p className="text-base text-gray-400 text-center md:text-left">
-                        &copy; {new Date().getFullYear()} Society of Hispanic Professional Engineers at UIUC. All rights reserved.
+                    <p className="text-base text-gray-400 text-center md:text-left flex items-center gap-1.5">
+                        <span>&copy; {new Date().getFullYear()} Society of Hispanic Professional Engineers at UIUC. All rights reserved.</span>
+                        <span className="group relative inline-flex items-center">
+                            <span className="text-lg opacity-60 drop-shadow-[0_0_4px_rgba(249,115,22,0.6)] hover:opacity-100 hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(249,115,22,0.9)] transition-all duration-300 cursor-default select-none">
+                                🔥
+                            </span>
+                            <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Shout out to Kev & Class of 2026
+                            </span>
+                        </span>
                     </p>
                 </div>
             </div>
