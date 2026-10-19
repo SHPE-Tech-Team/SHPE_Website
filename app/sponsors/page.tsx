@@ -88,7 +88,7 @@ export default function Sponsors() {
                             <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm mb-4 text-3xl font-bold">
                                 AP
                             </div>
-                            <h3 className="text-2xl font-bold">Alberto Pabon-Castejon</h3>
+                            <h3 className="text-2xl font-bold">Josh Perez</h3>
                             <p className="text-blue-200 font-medium">External Vice President</p>
                             <div className="mt-4 inline-flex items-center bg-white/10 px-3 py-1 rounded-full text-sm backdrop-blur-sm">
                                 <span>He/Him</span>
@@ -98,7 +98,7 @@ export default function Sponsors() {
                             <div className="space-y-6">
                                 <div>
                                     <p className="text-sm text-gray-500 uppercase tracking-wide font-semibold mb-1">Year & Major</p>
-                                    <p className="text-lg text-gray-900">Junior in Computer Science; T&M</p>
+                                    <p className="text-lg text-gray-900">Junior in Industrial Engineering; Minor in Economics</p>
                                 </div>
 
                                 <div>
