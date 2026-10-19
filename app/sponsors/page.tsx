@@ -86,7 +86,7 @@ export default function Sponsors() {
                     <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row transform hover:scale-[1.01] transition-transform duration-300">
                         <div className="bg-gradient-to-br from-shpe-blue to-blue-900 w-full md:w-2/5 p-8 flex flex-col justify-center items-center text-center text-white">
                             <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm mb-4 text-3xl font-bold">
-                                AP
+                                JP
                             </div>
                             <h3 className="text-2xl font-bold">Josh Perez</h3>
                             <p className="text-blue-200 font-medium">External Vice President</p>
