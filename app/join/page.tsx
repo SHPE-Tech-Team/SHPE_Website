@@ -38,7 +38,7 @@ export default function JoinPage() {
                                 }
                                 link={{
                                     text: "View Linktree",
-                                    href: "https://linktr.ee/SHPE.UI?utm_source=linktree_profile_share&ltsid=94fd3c15-a042-4e7c-894a-31c020045687",
+                                    href: "https://linktr.ee/SHPE_UIUC",
                                     target: "_blank"
                                 }}
                             />
